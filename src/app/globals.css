@@ -1,28 +1,67 @@
-/* @import "tailwindcss";
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* 
+    This block tells Tailwind v4 to automatically create utility classes.
+    For example: "--color-color-15" generates "bg-color-15" and "text-color-15" 
+  */
+  --color-color1: #6b7280;
+  --color-color2: #ffffff;
+  --color-color3: #d9d9d9;
+  --color-color4: #2772cc;
+  --color-color5: #244f84;
+  --color-color6: #030712;
+  --color-color7: #99d7f7;
+  --color-color8: #f3f4f8;
+  --color-color9: #1f2937;
+  --color-color10: #1a3151;
+  --color-color11: #e5e7eb;
+  --color-color12: #45a5ec;
+  --color-color13: #d97706;
+  --color-color-14: #f0f9fe;
+  --color-color-15: #f59e0b;
+  --color-color-16: #fbbf24;
+  --color-color-17: #d1d5db;
+
+  /* Fonts */
+  --font-outfit: var(--outfit-r), sans-serif;
+  --font-albert: var(--albert-sans-r), sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--color-color2);
+    color: var(--color-color6);
+    overflow-x: hidden;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Base Animations & Overrides */
+@keyframes loading {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.loader-progress {
+  animation: loading 3s ease forwards;
+}
+
+/* Swiper vertical rotation logic */
+.mySwiper .swiper-slide {
+  transition: transform 0.8s ease;
+}
+.mySwiper .swiper-slide:not(.swiper-slide-active) {
+  transform: rotate(160deg) !important;
+}
+.mySwiper .swiper-slide-active {
+  transform: rotate(0deg) !important;
+}
