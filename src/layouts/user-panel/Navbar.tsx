@@ -453,7 +453,7 @@ export default function Navbar() {
           <li className="border-b border-color11">
             <Link
               href="/"
-              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
+              className="block px-8 py-4 text-[22px] text-color6 hover:bg-color-14"
             >
               Home
             </Link>

@@ -4,33 +4,60 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, FreeMode } from "swiper/modules";
 
+// Image Imports
+import professional_services1 from "../../assets/images/professional-services1.png";
+import professional_services2 from "../../assets/images/professional-services2.png";
+import professional_services3 from "../../assets/images/professional-services3.png";
+import professional_services4 from "../../assets/images/professional-services4.png";
+
+import popular_service from "../../assets/images/popular-service.png";
+import popular_service1 from "../../assets/images/popular-service1.png";
+import popular_service2 from "../../assets/images/popular-service2.png";
+
+import latest_insight from "../../assets/images/latest-insight.png";
+import latest_insight1 from "../../assets/images/latest-insight1.png";
+import latest_insight2 from "../../assets/images/latest-insight2.png";
+import latest_insight4 from "../../assets/images/latest-insight4.png";
+
+import banner_left_curve from "../../assets/images/banner-left-curve.png";
+import verified_professional1 from "../../assets/images/verified-professional1.png";
+import verified_professional2 from "../../assets/images/verified-professional2.png";
+import verified_professional3 from "../../assets/images/verified-professional3.png";
+
+import hero_right from "../../assets/images/hero-right.png";
+
+import card_small_image_1 from "../../assets/images/card-small-image-1.png";
+import card_small_image_2 from "../../assets/images/card-small-image-2.png";
+import card_small_image_3 from "../../assets/images/card-small-image-3.png";
+
 // Swiper CSS
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
+import Image from "next/image";
 
 // --- DATA ARRAYS ---
 const professionalServices = [
   {
-    img: "/assets/images/professional-services1.png",
+    img: professional_services1,
     tag: "Electrician",
     title: "Professional Electrical Solutions",
     count: "200+",
   },
   {
-    img: "/assets/images/professional-services2.png",
+    img: professional_services2,
     tag: "Personal Grooming",
     title: "Beauty & Wellness At Home",
     count: "150+",
   },
   {
-    img: "/assets/images/professional-services3.png",
+    img: professional_services3,
     tag: "Delivery Assistance",
     title: "Fast & Reliable Deliveries",
     count: "600+",
   },
   {
-    img: "/assets/images/professional-services4.png",
+    img: professional_services4,
     tag: "House Help",
     title: "Trusted Home Assistance",
     count: "300+",
@@ -39,22 +66,22 @@ const professionalServices = [
 
 const popularServices = [
   {
-    img: "/assets/images/popular-service.png",
+    img: popular_service,
     title: "house help",
     desc: "Reliable housekeeping services for cleaning, laundry, cooking assistance, and everyday household tasks.",
   },
   {
-    img: "/assets/images/popular-service2.png",
+    img: popular_service2,
     title: "beautiful grooming",
     desc: "Book certified beauty and wellness professionals for salon, spa, skincare, and grooming services at home.",
   },
   {
-    img: "/assets/images/popular-service1.png",
+    img: popular_service1,
     title: "Home Repair",
     desc: "Quick and professional repair services for plumbing, carpentry, appliances, and general home maintenance.",
   },
   {
-    img: "/assets/images/popular-service.png",
+    img: popular_service,
     title: "house help",
     desc: "Reliable housekeeping services for cleaning, laundry, cooking assistance, and everyday household tasks.",
   },
@@ -62,25 +89,25 @@ const popularServices = [
 
 const insights = [
   {
-    img: "/assets/images/latest-insight.png",
+    img: latest_insight,
     tag: "Home Maintenance",
     title: "7 Essential Home Maintenance Tips Every Homeowner Should Know",
     meta: "Jul 06, 2026 • 5 min read",
   },
   {
-    img: "/assets/images/latest-insight4.png",
+    img: latest_insight4,
     tag: "Home Cleaning",
     title: "Deep Cleaning vs. Regular Cleaning: Which One Is Right for You?",
     meta: "Jul 02, 2026 • 4 min read",
   },
   {
-    img: "/assets/images/latest-insight1.png",
+    img: latest_insight1,
     tag: "Electrical Safety",
     title: "5 Warning Signs You Should Call a Professional Electrician",
     meta: "Oct 14, 2026 • 0 Comments",
   },
   {
-    img: "/assets/images/latest-insight2.png",
+    img: latest_insight2,
     tag: "House Help",
     title: "How to Choose a Reliable House Helper for Your Home",
     meta: "Oct 14, 2026 • 0 Comments",
@@ -157,8 +184,8 @@ export default function Home() {
       <div style={{ display: loading ? "none" : "block" }}>
         {/* ================= BANNER ================= */}
         <section className="relative overflow-hidden bg-white">
-          <img
-            src="/assets/images/banner-left-curve.png"
+          <Image
+            src={banner_left_curve}
             alt="banner-left-curve"
             className="hidden lg:block absolute left-0 bottom-0 z-0 w-[1000px] xl:w-[1200px] h-auto pointer-events-none select-none"
           />
@@ -202,18 +229,18 @@ export default function Home() {
                 <div className="relative mt-[80px] z-10 max-w-[440px] mx-auto lg:mx-0 rounded-[24px] bg-white shadow-lg px-[32px] py-[28px]">
                   <div className="flex items-center">
                     <div className="flex">
-                      <img
-                        src="/assets/images/verified-professional1.png"
+                      <Image
+                        src={verified_professional1}
                         className="w-[48px] h-[48px] rounded-full object-cover"
                         alt="pro"
                       />
-                      <img
-                        src="/assets/images/verified-professional2.png"
+                      <Image
+                        src={verified_professional2}
                         className="w-[48px] h-[48px] rounded-full object-cover -ml-[18px]"
                         alt="pro"
                       />
-                      <img
-                        src="/assets/images/verified-professional3.png"
+                      <Image
+                        src={verified_professional3}
                         className="w-[48px] h-[48px] rounded-full object-cover -ml-[18px]"
                         alt="pro"
                       />
@@ -237,8 +264,8 @@ export default function Home() {
 
               {/* Right Image */}
               <div className="relative z-10 w-full lg:w-[62vw] xl:w-[68vw] h-[320px] sm:h-[420px] md:h-[520px] lg:h-[893px] lg:-mr-[8vw]">
-                <img
-                  src="/assets/images/hero-right.png"
+                <Image
+                  src={hero_right}
                   alt="Hero Illustration"
                   className="w-full h-full object-contain scale-[1.15] origin-center"
                 />
@@ -260,7 +287,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="hidden lg:flex absolute z-30 right-0 bottom-[20px] w-[340px] items-center rounded-[22px] bg-white/85 backdrop-blur-xl border border-white/70 px-[22px] py-[18px] shadow-lg">
+                <div className="hidden lg:flex fixed z-30 right-0 bottom-[20px] w-[340px] items-center rounded-[22px] bg-white/85 backdrop-blur-xl border border-white/70 px-[22px] py-[18px] shadow-lg">
                   <div className="w-[58px] h-[58px] rounded-full bg-[#EAF5FF] flex items-center justify-center shrink-0">
                     <div className="w-[44px] h-[44px] rounded-full bg-color12 flex items-center justify-center text-white">
                       <i className="fa-solid fa-comment-dots"></i>
@@ -274,7 +301,7 @@ export default function Home() {
                       Chat With FIXBOT
                     </h5>
                     <p className="mt-[5px] text-[15px] leading-[24px] text-gray-500">
-                      We're here to help 24/7.
+                      We&apos;re here to help 24/7.
                     </p>
                   </div>
                 </div>
@@ -321,7 +348,7 @@ export default function Home() {
                   <SwiperSlide key={idx} className="!flex h-auto">
                     <div className="group h-full w-full rounded-[20px] bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
                       <figure className="relative rounded-t-[20px] overflow-hidden">
-                        <img
+                        <Image
                           src={service.img}
                           alt={service.tag}
                           className="w-full h-[220px] sm:h-[260px] md:h-[300px] lg:h-[320px] object-cover transition-transform duration-500 group-hover:scale-105"
@@ -337,18 +364,18 @@ export default function Home() {
                         <div className="flex justify-between items-center mt-[18px] sm:mt-[22px] lg:mt-[24px]">
                           <div className="flex items-center">
                             <div className="flex items-center bg-color8 rounded-[31px] p-[6px]">
-                              <img
-                                src="/assets/images/card-small-image-1.png"
+                              <Image
+                                src={card_small_image_1}
                                 className="w-[26px] h-[26px] sm:w-[30px] sm:h-[30px] lg:w-[32px] lg:h-[32px] rounded-full relative z-10"
                                 alt=""
                               />
-                              <img
-                                src="/assets/images/card-small-image-2.png"
+                              <Image
+                                src={card_small_image_2}
                                 className="w-[26px] h-[26px] sm:w-[30px] sm:h-[30px] lg:w-[32px] lg:h-[32px] rounded-full -ml-[14px] sm:-ml-[18px] lg:-ml-[20px] relative z-20"
                                 alt=""
                               />
-                              <img
-                                src="/assets/images/card-small-image-3.png"
+                              <Image
+                                src={card_small_image_3}
                                 className="w-[26px] h-[26px] sm:w-[30px] sm:h-[30px] lg:w-[32px] lg:h-[32px] rounded-full -ml-[14px] sm:-ml-[18px] lg:-ml-[20px] relative z-30"
                                 alt=""
                               />
@@ -461,7 +488,7 @@ export default function Home() {
                   <SwiperSlide key={idx}>
                     <div className="w-full">
                       <figure className="w-full h-[250px] sm:h-[280px] lg:h-[300px] overflow-hidden rounded-[20px]">
-                        <img
+                        <Image
                           src={service.img}
                           alt={service.title}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -719,6 +746,7 @@ export default function Home() {
             <div className="mt-[46px]">
               <Swiper
                 modules={[Autoplay, FreeMode]}
+                freeMode={true}
                 spaceBetween={20}
                 slidesPerView={4}
                 loop={true}
@@ -727,14 +755,14 @@ export default function Home() {
                   320: { slidesPerView: 1, spaceBetween: 15 },
                   545: { slidesPerView: 2, spaceBetween: 20 },
                   780: { slidesPerView: 2, spaceBetween: 25 },
-                  991: { slidesPerView: 4, spaceBetween: 30 },
+                  991: { slidesPerView: 3, spaceBetween: 30 },
                 }}
               >
                 {insights.map((insight, idx) => (
                   <SwiperSlide key={idx}>
                     <div className="w-full overflow-hidden">
                       <figure className="w-full h-[253px] overflow-hidden rounded-[20px]">
-                        <img
+                        <Image
                           src={insight.img}
                           alt="Insight"
                           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
