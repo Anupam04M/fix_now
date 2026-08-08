@@ -51,16 +51,15 @@ export default function Navbar() {
 
   // Pure Tailwind equivalent of .cmn-btn
   const btnClass =
-    "relative overflow-hidden z-10 transition-colors duration-300 before:absolute before:inset-0 before:-z-10 before:w-full before:h-full before:bg-[var(--color-15)] before:-translate-x-full before:transition-transform before:duration-500 hover:before:translate-x-0 hover:text-white";
-
+    "relative overflow-hidden rounded-[20px] z-10 transition-colors duration-300 before:absolute before:inset-0 before:-z-10 before:w-full before:h-full before:bg-color-15 before:-translate-x-full before:transition-transform before:duration-500 hover:before:translate-x-0 hover:text-white";
   return (
     <>
       <header>
         {/* Header Top */}
-        <div className="w-full min-h-[74px] bg-[var(--color-14)] px-[20px] py-[10px]">
+        <div className="w-full min-h-[74px] bg-color-14 px-[20px] py-[10px]">
           <div className="w-full flex flex-col md:flex-row items-center justify-between">
             <div className="w-auto shrink-0 text-center md:text-left">
-              <p className="font-[family-name:var(--albert-sans-r)] text-[14px] text-[var(--color5)] whitespace-nowrap">
+              <p className="font-[family-name:var(--albert-sans-r)] text-[14px] text-color5 whitespace-nowrap">
                 Trusted Local Services, Right When You Need Them.
               </p>
             </div>
@@ -99,13 +98,14 @@ export default function Navbar() {
                 )}
               </div>
 
-              <p className="hidden lg:block text-[16px] text-[var(--color-15)] whitespace-nowrap">
+              <p className="hidden lg:block text-[16px] text-color-15 whitespace-nowrap">
                 Help & Support
               </p>
 
               <Link
                 href="#"
-                className="hidden lg:block text-[16px] rounded-[20px] border-2 border-[var(--color4)] px-[36px] py-[16px] whitespace-nowrap text-[var(--color5)] hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:text-white transition-all duration-500 ease-in-out"
+                className="hidden lg:block text-[16px] rounded-[20px] border-2 border-color4 px-[36px] py-[16px]
+                 whitespace-nowrap text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-500 ease-in-out"
               >
                 Work With Us
               </Link>
@@ -116,7 +116,7 @@ export default function Navbar() {
         <div className="h-[1px] w-full bg-[linear-gradient(90deg,rgb(240,249,254)_1%,rgb(48,137,224)_47%,rgb(240,249,254)_100%)]"></div>
 
         {/* Main Nav */}
-        <nav className="w-full bg-[var(--color2)] px-[20px] py-[11px]">
+        <nav className="w-full bg-color2 px-[20px] py-[11px]">
           <div className="w-full">
             <div className="flex items-center justify-between h-[70px] py-[14px]">
               <Link href="/" className="shrink-0">
@@ -132,7 +132,8 @@ export default function Navbar() {
                   <li className="mr-[50px]">
                     <Link
                       href="/"
-                      className="relative text-[16px] font-semibold text-[var(--color4)] after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-full after:bg-[var(--color10)] transition-all duration-300 after:-translate-x-1/2"
+                      className="relative text-[16px] font-semibold text-color4 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px]
+                       after:w-full after:bg-color10 transition-all duration-300 after:-translate-x-1/2"
                     >
                       Home
                     </Link>
@@ -141,7 +142,7 @@ export default function Navbar() {
                   <li className="relative mr-[50px]">
                     <button
                       onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-                      className="relative outline-none text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-[var(--color10)] hover:after:w-full after:-translate-x-1/2 flex items-center gap-1 group"
+                      className="relative outline-none text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2 flex items-center gap-1 group"
                     >
                       Service
                       <svg
@@ -167,7 +168,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Electrician
                                 </Link>
@@ -175,7 +176,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Plumber
                                 </Link>
@@ -183,7 +184,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Personal Grooming
                                 </Link>
@@ -191,7 +192,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   House Help
                                 </Link>
@@ -199,7 +200,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Repairing
                                 </Link>
@@ -211,7 +212,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Carpenter
                                 </Link>
@@ -219,7 +220,7 @@ export default function Navbar() {
                               <li>
                                 <Link
                                   href="#"
-                                  className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300"
+                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
                                 >
                                   Delivery Assistance
                                 </Link>
@@ -234,7 +235,7 @@ export default function Navbar() {
                   <li className="mr-[50px]">
                     <Link
                       href="/about"
-                      className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-[var(--color10)] hover:after:w-full after:-translate-x-1/2"
+                      className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2"
                     >
                       About
                     </Link>
@@ -242,7 +243,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/contact"
-                      className="relative text-[16px] font-semibold text-[var(--color10)] hover:text-[var(--color4)] transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-[var(--color10)] hover:after:w-full after:-translate-x-1/2"
+                      className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2"
                     >
                       Contact Us
                     </Link>
@@ -257,7 +258,7 @@ export default function Navbar() {
                     onMouseLeave={() => setIsSearchOpen(false)}
                   >
                     <div className="absolute right-0 top-[48px] w-[440px] h-[25px] z-40"></div>
-                    <button className="relative z-40 w-12 h-12 rounded-full border border-[var(--color5)] flex items-center justify-center bg-white text-[var(--color5)] hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:text-white transition-all duration-300">
+                    <button className="relative z-40 w-12 h-12 rounded-full border border-color5 flex items-center justify-center bg-white text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300">
                       <svg
                         width="23"
                         height="23"
@@ -278,20 +279,20 @@ export default function Navbar() {
                     <div
                       className={`absolute right-0 top-[73px] w-[440px] transition-all duration-300 z-[9999] ${isSearchOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-[10px]"}`}
                     >
-                      <div className="relative w-full h-[62px] bg-white rounded-[30px] border border-[var(--color-15)] shadow-[0_4px_15px_rgba(0,0,0,0.10)]">
+                      <div className="relative w-full h-[62px] bg-white rounded-[30px] border border-color-15 shadow-[0_4px_15px_rgba(0,0,0,0.10)]">
                         <input
                           type="search"
                           placeholder="Search By City, Service Type, OR ZIP Code"
                           className="w-full h-full rounded-[30px] pl-[25px] pr-[55px] outline-none text-[14px] text-gray-600 placeholder:text-gray-400 bg-white"
                         />
-                        <button className="absolute right-[17px] top-1/2 -translate-y-1/2 text-[var(--color5)] hover:text-[var(--color-15)] transition">
+                        <button className="absolute right-[17px] top-1/2 -translate-y-1/2 text-color5 hover:text-color-15 transition">
                           <i className="fa-solid fa-microphone text-[20px]"></i>
                         </button>
                       </div>
 
                       <div className="mt-[15px] w-full bg-white rounded-[16px] border border-[#e0e4e9] shadow-[0_5px_20px_rgba(0,0,0,0.12)] overflow-hidden">
                         <div className="flex items-center min-h-[70px] px-[20px] bg-[#eef5ff] border-b border-[#dce3eb] cursor-pointer hover:bg-[#e7f1ff]">
-                          <div className="w-[40px] text-[var(--color5)]">
+                          <div className="w-[40px] text-color5">
                             <i className="fa-solid fa-location-dot text-[22px]"></i>
                           </div>
                           <p className="flex-1 text-[14px] text-gray-600">
@@ -300,7 +301,7 @@ export default function Navbar() {
                           <i className="fa-solid fa-chevron-right text-[12px] text-gray-400"></i>
                         </div>
                         <div className="flex items-center min-h-[70px] px-[20px] border-b border-[#e0e0e0] cursor-pointer hover:bg-[#f7f9fc]">
-                          <div className="w-[40px] text-[var(--color5)]">
+                          <div className="w-[40px] text-color5">
                             <i className="fa-solid fa-border-all text-[21px]"></i>
                           </div>
                           <p className="flex-1 text-[14px] text-gray-600">
@@ -309,7 +310,7 @@ export default function Navbar() {
                           <i className="fa-solid fa-chevron-right text-[12px] text-gray-400"></i>
                         </div>
                         <div className="flex items-center min-h-[70px] px-[20px] border-b border-[#e0e0e0] cursor-pointer hover:bg-[#f7f9fc]">
-                          <div className="w-[40px] text-[var(--color5)]">
+                          <div className="w-[40px] text-color5">
                             <i className="fa-solid fa-map-location-dot text-[21px]"></i>
                           </div>
                           <p className="flex-1 text-[14px] text-gray-600">
@@ -319,13 +320,13 @@ export default function Navbar() {
                         </div>
                         <div className="px-[20px] pt-[20px] pb-[20px]">
                           <div className="flex items-center">
-                            <div className="w-[40px] text-[var(--color5)]">
+                            <div className="w-[40px] text-color5">
                               <i className="fa-solid fa-clock-rotate-left text-[19px]"></i>
                             </div>
                             <p className="flex-1 text-[14px] text-gray-600">
                               Recent Searches
                             </p>
-                            <button className="text-gray-400 hover:text-[var(--color-15)]">
+                            <button className="text-gray-400 hover:text-color-15">
                               <i className="fa-solid fa-xmark text-[17px]"></i>
                             </button>
                           </div>
@@ -344,7 +345,7 @@ export default function Navbar() {
 
                   <Link
                     href="#"
-                    className="flex items-center justify-center w-12 h-12 border border-[var(--color5)] rounded-full mx-2 text-[var(--color5)] hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:text-white transition-all duration-300"
+                    className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text- hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300"
                   >
                     <svg
                       width="28"
@@ -365,7 +366,7 @@ export default function Navbar() {
 
                   <Link
                     href="#"
-                    className="flex items-center justify-center w-12 h-12 border border-[var(--color5)] rounded-full mx-2 text-[var(--color5)] hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:text-white transition-all duration-300"
+                    className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300"
                   >
                     <svg
                       className="transition-transform duration-300"
@@ -387,7 +388,7 @@ export default function Navbar() {
 
                   <button
                     onClick={() => setIsSignupOpen(true)}
-                    className={`${btnClass} ml-4 bg-[var(--color4)] py-[16px] px-[48px] font-[family-name:var(--outfit-r)] text-[18px] font-semibold text-[var(--color2)]`}
+                    className={`${btnClass} ml-4 bg-color4 py-[16px] px-[48px] font-outfit text-[18px] font-semibold text-color2`}
                   >
                     Sign Up
                   </button>
@@ -396,7 +397,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden text-[var(--color6)]"
+                className="lg:hidden text-color6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -428,64 +429,64 @@ export default function Navbar() {
       <div
         className={`fixed top-0 w-[300px] h-screen bg-white z-50 transition-all duration-300 shadow-2xl overflow-y-auto ${isMobileMenuOpen ? "right-0" : "right-[-100%]"}`}
       >
-        <div className="flex items-center justify-between px-5 py-5 border-b border-[var(--color11)]">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-color11">
           <img src={logoImg.src} alt="logo" className="w-[140px]" />
           <button
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-4xl text-[var(--color6)]"
+            className="text-4xl text-color6"
           >
             &times;
           </button>
         </div>
         <div className="flex justify-start px-8 gap-4 mt-8">
-          <div className="flex items-center justify-center w-12 h-12 border border-[var(--color5)] rounded-full mx-2 text-[var(--color10)]">
+          <div className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color10">
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          <div className="flex items-center justify-center w-12 h-12 border border-[var(--color5)] rounded-full mx-2 text-[var(--color10)]">
+          <div className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color10">
             <i className="fa-solid fa-user"></i>
           </div>
-          <div className="flex items-center justify-center w-12 h-12 border border-[var(--color5)] rounded-full mx-2 text-[var(--color10)]">
+          <div className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color10">
             <i className="fa-solid fa-cart-shopping"></i>
           </div>
         </div>
         <ul className="mt-6">
-          <li className="border-b border-[var(--color11)]">
+          <li className="border-b border-color11">
             <Link
               href="/"
-              className="block px-8 py-4 text-[20px] text-[var(--color6)] hover:bg-[var(--color-14)]"
+              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
             >
               Home
             </Link>
           </li>
-          <li className="border-b border-[var(--color11)]">
+          <li className="border-b border-color11">
             <Link
               href="/service"
-              className="block px-8 py-4 text-[20px] text-[var(--color6)] hover:bg-[var(--color-14)]"
+              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
             >
               Service
             </Link>
           </li>
-          <li className="border-b border-[var(--color11)]">
+          <li className="border-b border-color11">
             <Link
               href="/about"
-              className="block px-8 py-4 text-[20px] text-[var(--color6)] hover:bg-[var(--color-14)]"
+              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
             >
               About
             </Link>
           </li>
-          <li className="border-b border-[var(--color11)]">
+          <li className="border-b border-color11">
             <Link
               href="/contact"
-              className="block px-8 py-4 text-[20px] text-[var(--color6)] hover:bg-[var(--color-14)]"
+              className="block px-8 py-4 text-[20px] text- hover:bg-color-14"
             >
               Contact Us
             </Link>
           </li>
         </ul>
-        <div className="px-8 py-5 border-t border-[var(--color11)]">
+        <div className="px-8 py-5 border-t border-color11">
           <Link
             href="#"
-            className="block text-[18px] text-[var(--color-15)] hover:text-[var(--color4)] transition"
+            className="block text-[18px] text-color-15 hover:text-color4 transition"
           >
             Help & Support
           </Link>
@@ -493,13 +494,13 @@ export default function Navbar() {
         <div className="px-8 mt-6 space-y-4">
           <button
             onClick={() => setIsSignupOpen(true)}
-            className={`${btnClass} block w-full bg-[var(--color4)] py-[16px] text-center text-[18px] font-semibold text-white`}
+            className={`${btnClass} block w-full bg-color4 py-[16px] text-center text-[18px] font-semibold text-white`}
           >
             Sign Up
           </button>
           <Link
             href="#"
-            className="block w-full border-2 border-[var(--color4)] rounded-[20px] py-[16px] text-center text-[18px] font-semibold text-[var(--color5)] hover:bg-[var(--color4)] hover:text-white transition-all duration-300"
+            className="block w-full border-2 border-color4 rounded-[20px] py-[16px] text-center text-[18px] font-semibold text-color5 hover:bg-color4 hover:text-white transition-all duration-300"
           >
             Work With Us
           </Link>
@@ -510,7 +511,7 @@ export default function Navbar() {
       {isSignupOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-sm py-[20px] lg:py-[36px] flex items-center justify-center">
           <div className="max-w-[1350px] mx-auto px-[15px] flex items-center justify-center min-h-full w-full">
-            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-[var(--color2)] rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
+            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-color2 rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
               <div className="relative z-0 w-full lg:w-1/2 shrink-0 min-h-[260px] sm:min-h-[380px] lg:min-h-[821px] bg-[linear-gradient(180deg,_#DDF0FC_13%,_#2772CC_86%)] overflow-hidden rounded-none lg:rounded-tr-[70px] lg:rounded-br-[70px] flex items-center justify-center p-6 lg:p-0">
                 <span className="absolute top-[20px] left-[20px] sm:top-[30px] sm:left-[30px] lg:top-[36px] lg:left-[42px] w-[90px] h-[24px] sm:w-[110px] sm:h-[28px] lg:w-[128px] lg:h-[32px] rounded-full bg-white/20 pointer-events-none"></span>
                 <span className="absolute top-[40px] right-[20px] sm:top-[50px] sm:right-[50px] lg:top-[58px] lg:right-[92px] w-[130px] h-[30px] sm:w-[160px] sm:h-[35px] lg:w-[192px] lg:h-[40px] rounded-full bg-white/20 pointer-events-none"></span>
@@ -523,17 +524,17 @@ export default function Navbar() {
                 </figure>
               </div>
 
-              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-[var(--color2)] pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
+              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-color2 pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
                 <div className="flex justify-end">
                   <button
                     onClick={() => setIsSignupOpen(false)}
-                    className="text-[16px] font-semibold text-[var(--color4)] hover:text-[var(--color-15)] transition-colors duration-300"
+                    className="text-[16px] font-semibold text-color4 hover:text-color-15 transition-colors duration-300"
                   >
                     Skip
                   </button>
                 </div>
                 <div className="mt-[5px]">
-                  <h2 className="text-[28px] sm:text-[32px] lg:text-[32px] leading-none font-semibold text-[var(--color10)] font-[family-name:var(--outfit-r)]">
+                  <h2 className="text-[28px] sm:text-[32px] lg:text-[32px] leading-none font-semibold text-color10 font-[family-name:var(--outfit-r)]">
                     Create An Account
                   </h2>
                 </div>
@@ -545,7 +546,7 @@ export default function Navbar() {
                         type="text"
                         placeholder="First Name*"
                         required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                       />
                     </div>
                     <div className="w-full sm:w-[48%]">
@@ -553,7 +554,7 @@ export default function Navbar() {
                         type="text"
                         placeholder="Last Name*"
                         required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                       />
                     </div>
                   </div>
@@ -564,14 +565,14 @@ export default function Navbar() {
                         type="tel"
                         placeholder="Phone Number*"
                         required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                       />
                     </div>
                     <div className="w-full sm:w-[48%]">
                       <input
                         type="email"
                         placeholder="Enter Your Email"
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                       />
                     </div>
                   </div>
@@ -580,7 +581,7 @@ export default function Navbar() {
                     <input
                       type="password"
                       placeholder="Enter Your Password"
-                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                     />
                   </div>
 
@@ -588,7 +589,7 @@ export default function Navbar() {
                     <input
                       type="password"
                       placeholder="Confirm Password"
-                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                     />
                   </div>
 
@@ -601,12 +602,12 @@ export default function Navbar() {
                     />
                     <label
                       htmlFor="terms"
-                      className="ml-[5.5px] text-[14px] sm:text-[16px] leading-6 text-[var(--color1)]"
+                      className="ml-[5.5px] text-[14px] sm:text-[16px] leading-6 text-color1"
                     >
                       I Agree To The{" "}
                       <Link
                         href="#"
-                        className="font-semibold text-[var(--color10)] hover:text-[var(--color-15)] transition-colors duration-300"
+                        className="font-semibold text-color10 hover:text-color-15 transition-colors duration-300"
                       >
                         Terms & Conditions
                       </Link>
@@ -615,7 +616,7 @@ export default function Navbar() {
 
                   <button
                     type="submit"
-                    className={`${btnClass} group w-full h-[60px] sm:h-[68px] lg:h-[76px] mt-[20px] bg-[var(--color4)] flex items-center justify-center text-[15px] sm:text-[16px] font-semibold text-[var(--color2)]`}
+                    className={`${btnClass} group w-full h-[60px] sm:h-[68px] lg:h-[76px] mt-[20px] bg-color4 flex items-center justify-center text-[15px] sm:text-[16px] font-semibold text-color2`}
                   >
                     Create Account
                     <svg
@@ -646,13 +647,13 @@ export default function Navbar() {
                   <div className="flex flex-col sm:flex-row justify-between mt-[20px]">
                     <button
                       type="button"
-                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66.25px] rounded-[20px] border-2 border-[var(--color4)] flex items-center justify-center transition-all duration-500 hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
+                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66.25px] rounded-[20px] border-2 border-color4 flex items-center justify-center transition-all duration-500 hover:bg-color-15 hover:border-color-15 hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
                     >
-                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-[var(--color4)] transition-colors duration-500 group-hover:text-[var(--color2)]">
+                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-color4 transition-colors duration-500 group-hover:text-color2">
                         Continue With
                       </span>
                       <svg
-                        className="text-[var(--color4)] group-hover:text-[var(--color2)]"
+                        className="text-color4 group-hover:text-color2"
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
@@ -667,20 +668,20 @@ export default function Navbar() {
                     </button>
                     <button
                       type="button"
-                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] h-[66.25px] rounded-[20px] border-2 border-[var(--color4)] flex items-center justify-center transition-all duration-500 hover:bg-[var(--color-15)] hover:border-[var(--color-15)] hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
+                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] h-[66.25px] rounded-[20px] border-2 border-color4 flex items-center justify-center transition-all duration-500 hover:bg-color-15 hover:border-color-15 hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
                     >
-                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-[var(--color4)] transition-colors duration-500 group-hover:text-[var(--color2)]">
+                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-color4 transition-colors duration-500 group-hover:text-color2">
                         Continue With
                       </span>
-                      <i className="fa-brands fa-apple text-[24px] text-[var(--color4)] group-hover:text-white transition-colors"></i>
+                      <i className="fa-brands fa-apple text-[24px] text-color4 group-hover:text-white transition-colors"></i>
                     </button>
                   </div>
-                  <p className="mt-[28px] sm:mt-[38px] text-center text-[14px] sm:text-[16px] font-medium text-[var(--color1)]">
+                  <p className="mt-[28px] sm:mt-[38px] text-center text-[14px] sm:text-[16px] font-medium text-color1">
                     Already Have An Account?{" "}
                     <button
                       type="button"
                       onClick={openLogin}
-                      className="font-semibold text-[var(--color4)] hover:text-[var(--color-15)] transition-colors duration-300"
+                      className="font-semibold text-color4 hover:text-color-15 transition-colors duration-300"
                     >
                       Sign In
                     </button>
@@ -696,7 +697,7 @@ export default function Navbar() {
       {isLoginOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-sm py-[20px] lg:py-[36px] flex items-center justify-center">
           <div className="max-w-[1350px] mx-auto px-[15px] flex items-center justify-center min-h-full w-full">
-            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-[var(--color2)] rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
+            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-color2 rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
               <div className="relative z-0 w-full lg:w-1/2 shrink-0 min-h-[260px] sm:min-h-[380px] lg:min-h-[821px] bg-[linear-gradient(180deg,_#DDF0FC_13%,_#2772CC_86%)] overflow-hidden rounded-none lg:rounded-tr-[70px] lg:rounded-br-[70px] flex items-center justify-center p-6 lg:p-0">
                 <span className="absolute top-[36px] left-[42px] w-[128px] h-[32px] rounded-full bg-white/20"></span>
                 <span className="absolute top-[58px] right-[92px] w-[192px] h-[40px] rounded-full bg-white/20"></span>
@@ -709,20 +710,20 @@ export default function Navbar() {
                 </figure>
               </div>
 
-              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-[var(--color2)] pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
+              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-color2 pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
                 <div className="flex justify-end">
                   <button
                     onClick={() => setIsLoginOpen(false)}
-                    className="text-[24px] font-semibold text-[var(--color10)] hover:text-gray-600 transition-colors duration-300"
+                    className="text-[24px] font-semibold text-color10 hover:text-gray-600 transition-colors duration-300"
                   >
                     &times;
                   </button>
                 </div>
                 <div className="mt-[5px]">
-                  <h2 className="text-[32px] font-semibold leading-none text-[var(--color10)] font-[family-name:var(--outfit-r)]">
+                  <h2 className="text-[32px] font-semibold leading-none text-color10 font-[family-name:var(--outfit-r)]">
                     Welcome Back
                   </h2>
-                  <p className="mt-[12px] text-[16px] text-[var(--color1)]">
+                  <p className="mt-[12px] text-[16px] text-color1">
                     Login to continue your account.
                   </p>
                 </div>
@@ -733,7 +734,7 @@ export default function Navbar() {
                       type="email"
                       placeholder="Enter Your Email"
                       required
-                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                     />
                   </div>
                   <div className="mt-[20px]">
@@ -741,7 +742,7 @@ export default function Navbar() {
                       type="password"
                       placeholder="Enter Your Password"
                       required
-                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-[var(--color4)] rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-[var(--color1)] focus:border-[var(--color5)] transition-all duration-300 text-black"
+                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
                     />
                   </div>
 
@@ -749,15 +750,15 @@ export default function Navbar() {
                     <label className="flex items-center cursor-pointer">
                       <input
                         type="checkbox"
-                        className="w-[20px] h-[20px] accent-[var(--color4)]"
+                        className="w-[20px] h-[20px] accent-color4"
                       />
-                      <span className="ml-[10px] text-[15px] text-[var(--color1)]">
+                      <span className="ml-[10px] text-[15px] text-color1">
                         Remember Me
                       </span>
                     </label>
                     <a
                       href="#"
-                      className="text-[15px] font-medium text-[var(--color4)] hover:text-[var(--color-15)] transition-all duration-300"
+                      className="text-[15px] font-medium text-color4 hover:text-color-15 transition-all duration-300"
                     >
                       Forgot Password?
                     </a>
@@ -765,7 +766,7 @@ export default function Navbar() {
 
                   <button
                     type="submit"
-                    className={`${btnClass} w-full h-[60px] lg:h-[76px] mt-[20px] bg-[var(--color4)] flex items-center justify-center text-[18px] font-semibold text-white`}
+                    className={`${btnClass} w-full h-[60px] lg:h-[76px] mt-[20px] bg-color4 flex items-center justify-center text-[18px] font-semibold text-white`}
                   >
                     Login
                     <svg
@@ -796,9 +797,9 @@ export default function Navbar() {
                   <div className="flex flex-col sm:flex-row justify-between mt-[20px]">
                     <button
                       type="button"
-                      className="group w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66px] rounded-[20px] border-2 border-[var(--color4)] flex items-center justify-center hover:bg-[var(--color-15)] hover:border-[var(--color-15)] transition-all duration-500"
+                      className="group w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66px] rounded-[20px] border-2 border-color4 flex items-center justify-center hover:bg-color-15 hover:border-color-15 transition-all duration-500"
                     >
-                      <span className="text-[14px] font-semibold text-[var(--color4)] group-hover:text-[var(--color2)] capitalize">
+                      <span className="text-[14px] font-semibold text-color4 group-hover:text-color2 capitalize">
                         continue of Google
                       </span>
                       <img
@@ -809,12 +810,12 @@ export default function Navbar() {
                     </button>
                     <button
                       type="button"
-                      className="group w-full sm:w-[48%] h-[66px] rounded-[20px] border-2 border-[var(--color4)] flex items-center justify-center hover:bg-[var(--color-15)] hover:border-[var(--color-15)] transition-all duration-500"
+                      className="group w-full sm:w-[48%] h-[66px] rounded-[20px] border-2 border-color4 flex items-center justify-center hover:bg-color-15 hover:border-color-15 transition-all duration-500"
                     >
-                      <span className="text-[14px] font-semibold text-[var(--color4)] group-hover:text-[var(--color2)]">
+                      <span className="text-[14px] font-semibold text-color4 group-hover:text-color2">
                         Continue with
                       </span>
-                      <i className="fa-brands fa-apple text-[24px] ms-[12px] text-[var(--color4)] group-hover:text-white transition-colors"></i>
+                      <i className="fa-brands fa-apple text-[24px] ms-[12px] text-color4 group-hover:text-white transition-colors"></i>
                     </button>
                   </div>
                 </form>
