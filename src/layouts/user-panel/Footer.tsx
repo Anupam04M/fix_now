@@ -6,8 +6,8 @@ import footerLogo from "@/assets/images/footer-logo.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-color-15 py-[40px] sm:py-[60px] lg:py-[80px]">
-      <div className="max-w-[1350px] mx-auto px-[15px]">
+    <footer className="bg-color-15 border border-black mt-30 py-[60px] sm:py-[60px] lg:py-[80px]">
+      <div className="max-w-[1350px] mx-auto px-[40px]">
         {/* ================= Top Row: Logo & Newsletter ================= */}
         <div className="flex flex-col lg:flex-row justify-between gap-[40px] lg:gap-0">
           {/* Left Side: Logo & Slogan */}
@@ -16,17 +16,20 @@ export default function Footer() {
               <Image
                 src={footerLogo}
                 alt="FixNow Logo"
-                className="w-[160px] md:w-[180px] lg:w-[208px] h-auto object-contain"
+                className="w-[140px] md:w-[180px] lg:w-[208px] mx-auto lg:mx-0 h-auto object-contain"
               />
             </Link>
-            <div className="text-color10 text-[20px] md:text-[24px] lg:text-[28px] font-outfit font-semibold leading-[1.4] max-w-[450px]">
+            <div
+              className="text-color10 text-[18px] md:text-[20px] lg:text-[24px]
+             font-outfit font-semibold leading-[1.4] max-w-[450px]"
+            >
               Making Everyday Services Simple & Reliable
             </div>
           </div>
 
           {/* Right Side: Stay Updated (Newsletter) */}
           <div className="w-full lg:w-1/2 flex flex-col items-start lg:items-start text-left">
-            <div className="text-white text-[20px] md:text-[22px] lg:text-[24px] font-outfit font-semibold mb-[16px]">
+            <div className="text-white text-[18px] md:text-[20px] lg:text-[24px] font-outfit font-semibold mb-[16px]">
               Stay Updated
             </div>
             <p className="text-white text-[14px] lg:text-[16px] mb-[24px] max-w-[535px] leading-[1.6] font-albert">
