@@ -55,13 +55,26 @@
   animation: loading 3s ease forwards;
 }
 
-/* Swiper vertical rotation logic */
+/* ====================================================== */
+/* Swiper vertical rotation & stacking logic              */
+/* ====================================================== */
+
+/* 1. Fix the stacking order so the active slide is always on top */
 .mySwiper .swiper-slide {
-  transition: transform 0.8s ease;
+  z-index: 1 !important;
 }
-.mySwiper .swiper-slide:not(.swiper-slide-active) {
+
+.mySwiper .swiper-slide-active {
+  z-index: 10 !important;
+}
+
+/* 2. Rotate the INNER div, not the .swiper-slide itself. 
+      Rotating the slide breaks Swiper's drag calculations. */
+.mySwiper .swiper-slide > div {
+  transition: transform 0.8s ease !important;
   transform: rotate(160deg) !important;
 }
-.mySwiper .swiper-slide-active {
+
+.mySwiper .swiper-slide-active > div {
   transform: rotate(0deg) !important;
 }
