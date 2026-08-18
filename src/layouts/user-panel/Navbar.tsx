@@ -2,28 +2,67 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 
 // Replace with actual filenames from your assets folder if different
 import logoImg from "@/assets/images/Frame 14.png";
-import signupIllus from "@/assets/images/Create Account Illustration.png";
-import loginIllus from "@/assets/images/Main Illustration Container.png";
-import googleIcon from "@/assets/images/Vector.png";
+import SignupForm from "@/components/SignupForm";
+import LoginForm from "@/components/LoginForm";
+import { useAuthStore } from "@/store/useAuthStore";
+
+// Import your extracted modal components
+
+type NavItem = {
+  name: string;
+  path?: string;
+  dropdown?: { name: string; path: string }[];
+};
+
+const navItems: NavItem[] = [
+  { name: "Home", path: "/" },
+  {
+    name: "Services",
+    path: "/service",
+    dropdown: [
+      { name: "Electrician", path: "/service/electrician" },
+      { name: "Plumber", path: "/service/plumber" },
+      { name: "Personal Grooming", path: "/service/personalgrooming" },
+      { name: "House Help", path: "/service/househelp" },
+      { name: "Repairing", path: "/service/repairing" },
+      { name: "Carpenter", path: "/service/carpenter" },
+      { name: "Delivery Assistance", path: "/service/deliveryassistance" },
+    ],
+  },
+  { name: "About", path: "/about" },
+  { name: "Contact Us", path: "/contact" },
+];
 
 export default function Navbar() {
+  const router = useRouter();
+  const pathname = usePathname(); // Added for dynamic active states
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
 
   const [locationType, setLocationType] = useState("Choose Location");
   const [address, setAddress] = useState("No location selected.");
 
+  // Modal State
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const { isAuthenticate, logout } = useAuthStore();
 
   const openLogin = () => {
     setIsSignupOpen(false);
     setIsLoginOpen(true);
+  };
+
+  const openSignup = () => {
+    setIsLoginOpen(false);
+    setIsSignupOpen(true);
   };
 
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -128,126 +167,139 @@ export default function Navbar() {
               </Link>
 
               <div className="hidden lg:flex items-center w-full">
+                {/* DYNAMIC NAVIGATION LIST */}
                 <ul className="flex mx-auto">
-                  <li className="mr-[50px]">
-                    <Link
-                      href="/"
-                      className="relative text-[16px] font-semibold text-color4 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px]
-                       after:w-full after:bg-color10 transition-all duration-300 after:-translate-x-1/2"
-                    >
-                      Home
-                    </Link>
-                  </li>
+                  {navItems.map((nav, idx) => {
+                    // 1. Calculate active states dynamically
+                    const isActive = pathname === nav.path;
+                    const isDropdownActive = nav.dropdown?.some(
+                      (item) => pathname === item.path,
+                    );
 
-                  <li className="relative mr-[50px]">
-                    <button
-                      onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-                      className="relative outline-none text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2 flex items-center gap-1 group"
-                    >
-                      Service
-                      <svg
-                        className={`w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? "rotate-180" : ""}`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                    return (
+                      <li
+                        key={idx}
+                        className="relative mr-[50px] last:mr-0 group py-4" // Added py-4 to create a safe hover bridge
+                        onMouseEnter={() =>
+                          nav.dropdown && setIsMegaMenuOpen(true)
+                        }
+                        onMouseLeave={() =>
+                          nav.dropdown && setIsMegaMenuOpen(false)
+                        }
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+                        {nav.dropdown ? (
+                          <>
+                            {/* Mega Menu Trigger Link (Now Clickable) */}
+                            <Link
+                              href={nav.path || "/service"}
+                              className={`relative outline-none text-[18px] font-semibold transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:bg-color10 after:-translate-x-1/2 flex items-center gap-1 ${
+                                isDropdownActive || isMegaMenuOpen
+                                  ? "text-color4 after:w-full" // Active state
+                                  : "text-color10 hover:text-color4 after:w-0 hover:after:w-full" // Default state
+                              }`}
+                            >
+                              {nav.name}
+                              <svg
+                                className={`w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? "rotate-180" : ""}`}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            </Link>
 
-                    {isMegaMenuOpen && (
-                      <div className="absolute -left-[200px] mt-[30px] w-[600px] bg-white shadow-2xl rounded-xl p-8 z-50">
-                        <div className="grid grid-cols-12 gap-8">
-                          <div className="col-span-6">
-                            <ul className="space-y-2 text-left">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Electrician
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Plumber
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Personal Grooming
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  House Help
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Repairing
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="col-span-6">
-                            <ul className="space-y-2 text-left">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Carpenter
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300"
-                                >
-                                  Delivery Assistance
-                                </Link>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </li>
+                            {/* Mega Menu Dropdown (Uses CSS visibility for smooth hover) */}
+                            <div
+                              className={`absolute -left-[200px] top-[100%] mt-[10px] w-[600px] bg-white shadow-2xl rounded-xl p-8 z-50 transition-all duration-300 ${
+                                isMegaMenuOpen
+                                  ? "opacity-100 visible translate-y-0"
+                                  : "opacity-0 invisible translate-y-2 pointer-events-none"
+                              }`}
+                            >
+                              <div className="grid grid-cols-12 gap-8">
+                                {/* Column 1: First 5 items */}
+                                <div className="col-span-6">
+                                  <ul className="space-y-2 text-left">
+                                    {nav.dropdown
+                                      .slice(0, 5)
+                                      .map((item, dropIdx) => {
+                                        const isItemActive =
+                                          pathname === item.path;
+                                        return (
+                                          <li key={dropIdx}>
+                                            <Link
+                                              href={item.path}
+                                              onClick={() =>
+                                                setIsMegaMenuOpen(false)
+                                              }
+                                              className={`relative text-[18px] font-semibold transition-all duration-300 ${
+                                                isItemActive
+                                                  ? "text-color4"
+                                                  : "text-color10 hover:text-color4"
+                                              }`}
+                                            >
+                                              {item.name}
+                                            </Link>
+                                          </li>
+                                        );
+                                      })}
+                                  </ul>
+                                </div>
 
-                  <li className="mr-[50px]">
-                    <Link
-                      href="/about"
-                      className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2"
-                    >
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/contact"
-                      className="relative text-[16px] font-semibold text-color10 hover:text-color4 transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:w-0 after:bg-color10 hover:after:w-full after:-translate-x-1/2"
-                    >
-                      Contact Us
-                    </Link>
-                  </li>
+                                {/* Column 2: Remaining items */}
+                                <div className="col-span-6">
+                                  <ul className="space-y-2 text-left">
+                                    {nav.dropdown
+                                      .slice(5)
+                                      .map((item, dropIdx) => {
+                                        const isItemActive =
+                                          pathname === item.path;
+                                        return (
+                                          <li key={dropIdx}>
+                                            <Link
+                                              href={item.path}
+                                              onClick={() =>
+                                                setIsMegaMenuOpen(false)
+                                              }
+                                              className={`relative text-[18px] font-semibold transition-all duration-300 ${
+                                                isItemActive
+                                                  ? "text-color4"
+                                                  : "text-color10 hover:text-color4"
+                                              }`}
+                                            >
+                                              {item.name}
+                                            </Link>
+                                          </li>
+                                        );
+                                      })}
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          /* Standard Navigation Links */
+                          <Link
+                            href={nav.path || "#"}
+                            onClick={() => setIsMegaMenuOpen(false)}
+                            className={`relative text-[18px] font-semibold transition-all duration-300 after:absolute after:left-1/2 after:-bottom-2 after:h-[1.5px] after:bg-color10 after:-translate-x-1/2 flex items-center ${
+                              isActive
+                                ? "text-color4 after:w-full" // Active state
+                                : "text-color10 hover:text-color4 after:w-0 hover:after:w-full" // Default state
+                            }`}
+                          >
+                            {nav.name}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <div className="flex items-center">
@@ -257,7 +309,11 @@ export default function Navbar() {
                     onMouseEnter={() => setIsSearchOpen(true)}
                     onMouseLeave={() => setIsSearchOpen(false)}
                   >
-                    <div className="absolute right-0 top-[48px] w-[440px] h-[25px] z-40"></div>
+                    {/* FIX: Added dynamic visibility to the invisible bridge so it doesn't block "Contact Us" */}
+                    <div
+                      className={`absolute right-0 top-[48px] w-[440px] h-[25px] z-40 ${isSearchOpen ? "block" : "hidden"}`}
+                    ></div>
+
                     <button className="relative z-40 w-12 h-12 rounded-full border border-color5 flex items-center justify-center bg-white text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300">
                       <svg
                         width="23"
@@ -386,12 +442,23 @@ export default function Navbar() {
                     </svg>
                   </Link>
 
-                  <button
-                    onClick={() => setIsSignupOpen(true)}
-                    className={`${btnClass} ml-4 bg-color4 py-[16px] px-[48px] font-outfit text-[18px] font-semibold text-color2`}
-                  >
-                    Sign Up
-                  </button>
+                  {isAuthenticate ? (
+                    <button
+                      onClick={async () => {
+                        await logout();
+                      }}
+                      className={`${btnClass} ml-4 bg-red-500 before:bg-red-700 py-[16px] px-[48px] font-outfit text-[18px] font-semibold text-white`}
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setIsSignupOpen(true)}
+                      className={`${btnClass} ml-4 bg-color4 py-[16px] px-[48px] font-outfit text-[18px] font-semibold text-color2`}
+                    >
+                      Sign Up
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -420,12 +487,15 @@ export default function Navbar() {
       </header>
 
       {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
+
+      {/* Mobile Menu Drawer */}
       <div
         className={`fixed top-0 w-[300px] h-screen bg-white z-50 transition-all duration-300 shadow-2xl overflow-y-auto ${isMobileMenuOpen ? "right-0" : "right-[-100%]"}`}
       >
@@ -438,6 +508,7 @@ export default function Navbar() {
             &times;
           </button>
         </div>
+
         <div className="flex justify-start px-8 gap-4 mt-8">
           <div className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color10">
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -449,40 +520,82 @@ export default function Navbar() {
             <i className="fa-solid fa-cart-shopping"></i>
           </div>
         </div>
+
+        {/* DYNAMIC MOBILE NAV LIST */}
         <ul className="mt-6">
-          <li className="border-b border-color11">
-            <Link
-              href="/"
-              className="block px-8 py-4 text-[22px] text-color6 hover:bg-color-14"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="border-b border-color11">
-            <Link
-              href="/service"
-              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
-            >
-              Service
-            </Link>
-          </li>
-          <li className="border-b border-color11">
-            <Link
-              href="/about"
-              className="block px-8 py-4 text-[20px] text-color6 hover:bg-color-14"
-            >
-              About
-            </Link>
-          </li>
-          <li className="border-b border-color11">
-            <Link
-              href="/contact"
-              className="block px-8 py-4 text-[20px] text- hover:bg-color-14"
-            >
-              Contact Us
-            </Link>
-          </li>
+          {navItems.map((nav, idx) => {
+            const isActive = pathname === nav.path;
+
+            return (
+              <li key={idx} className="border-b border-color11 flex flex-col">
+                {nav.dropdown ? (
+                  <>
+                    {/* Mobile Dropdown Trigger */}
+                    <button
+                      onClick={() =>
+                        setOpenMenu(openMenu === nav.name ? null : nav.name)
+                      }
+                      className="flex items-center justify-between px-8 py-4 text-[20px] text-color6 hover:bg-color-14 w-full outline-none"
+                    >
+                      {nav.name}
+                      <svg
+                        className={`w-4 h-4 transition-transform duration-300 ${
+                          openMenu === nav.name ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+
+                    {/* Mobile Dropdown Items */}
+                    {openMenu === nav.name && (
+                      <ul className="bg-[#f8f8f8] flex flex-col border-t border-color11">
+                        {nav.dropdown.map((item, i) => {
+                          const isItemActive = pathname === item.path;
+                          return (
+                            <li key={i}>
+                              <Link
+                                href={item.path}
+                                onClick={() => setIsMobileMenuOpen(false)} // Closes drawer
+                                className={`block px-12 py-3 text-[16px] transition-colors ${
+                                  isItemActive
+                                    ? "text-color4 font-semibold"
+                                    : "text-color6 hover:bg-color-14"
+                                }`}
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  /* Standard Mobile Link */
+                  <Link
+                    href={nav.path || "#"}
+                    onClick={() => setIsMobileMenuOpen(false)} // Closes drawer
+                    className={`block px-8 py-4 hover:bg-color-14 transition-colors ${
+                      nav.name === "Home" ? "text-[22px]" : "text-[20px]"
+                    } ${isActive ? "text-color4 font-semibold" : "text-color6"}`}
+                  >
+                    {nav.name}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
+
         <div className="px-8 py-5 border-t border-color11">
           <Link
             href="#"
@@ -491,13 +604,26 @@ export default function Navbar() {
             Help & Support
           </Link>
         </div>
+
         <div className="px-8 mt-6 space-y-4">
-          <button
-            onClick={() => setIsSignupOpen(true)}
-            className={`${btnClass} block w-full bg-color4 py-[16px] text-center text-[18px] font-semibold text-white`}
-          >
-            Sign Up
-          </button>
+          {isAuthenticate ? (
+            <button
+              onClick={async () => {
+                await logout();
+                setIsMobileMenuOpen(false); // Optional: closes the mobile menu after logging out
+              }}
+              className={`${btnClass} block w-full bg-red-500 before:bg-red-700 py-[16px] text-center text-[18px] font-semibold text-white`}
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsSignupOpen(true)}
+              className={`${btnClass} block w-full bg-color4 py-[16px] text-center text-[18px] font-semibold text-white`}
+            >
+              Sign Up
+            </button>
+          )}
           <Link
             href="#"
             className="block w-full border-2 border-color4 rounded-[20px] py-[16px] text-center text-[18px] font-semibold text-color5 hover:bg-color4 hover:text-white transition-all duration-300"
@@ -507,322 +633,19 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* SIGNUP MODAL */}
+      {/* RENDER EXTRACTED MODALS */}
       {isSignupOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-sm py-[20px] lg:py-[36px] flex items-center justify-center">
-          <div className="max-w-[1350px] mx-auto px-[15px] flex items-center justify-center min-h-full w-full">
-            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-color2 rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
-              <div className="relative z-0 w-full lg:w-1/2 shrink-0 min-h-[260px] sm:min-h-[380px] lg:min-h-[821px] bg-[linear-gradient(180deg,_#DDF0FC_13%,_#2772CC_86%)] overflow-hidden rounded-none lg:rounded-tr-[70px] lg:rounded-br-[70px] flex items-center justify-center p-6 lg:p-0">
-                <span className="absolute top-[20px] left-[20px] sm:top-[30px] sm:left-[30px] lg:top-[36px] lg:left-[42px] w-[90px] h-[24px] sm:w-[110px] sm:h-[28px] lg:w-[128px] lg:h-[32px] rounded-full bg-white/20 pointer-events-none"></span>
-                <span className="absolute top-[40px] right-[20px] sm:top-[50px] sm:right-[50px] lg:top-[58px] lg:right-[92px] w-[130px] h-[30px] sm:w-[160px] sm:h-[35px] lg:w-[192px] lg:h-[40px] rounded-full bg-white/20 pointer-events-none"></span>
-                <figure className="w-[220px] sm:w-[320px] md:w-[420px] lg:w-[560px] max-w-full">
-                  <img
-                    src={signupIllus.src}
-                    alt="Create Account"
-                    className="block w-full h-auto object-contain"
-                  />
-                </figure>
-              </div>
-
-              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-color2 pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setIsSignupOpen(false)}
-                    className="text-[16px] font-semibold text-color4 hover:text-color-15 transition-colors duration-300"
-                  >
-                    Skip
-                  </button>
-                </div>
-                <div className="mt-[5px]">
-                  <h2 className="text-[28px] sm:text-[32px] lg:text-[32px] leading-none font-semibold text-color10 font-[family-name:var(--outfit-r)]">
-                    Create An Account
-                  </h2>
-                </div>
-
-                <form className="mt-[30px] lg:mt-[44px]">
-                  <div className="flex flex-col sm:flex-row justify-between">
-                    <div className="w-full sm:w-[48%] mb-[20px] sm:mb-0">
-                      <input
-                        type="text"
-                        placeholder="First Name*"
-                        required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                      />
-                    </div>
-                    <div className="w-full sm:w-[48%]">
-                      <input
-                        type="text"
-                        placeholder="Last Name*"
-                        required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between mt-[20px]">
-                    <div className="w-full sm:w-[48%] mb-[20px] sm:mb-0">
-                      <input
-                        type="tel"
-                        placeholder="Phone Number*"
-                        required
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                      />
-                    </div>
-                    <div className="w-full sm:w-[48%]">
-                      <input
-                        type="email"
-                        placeholder="Enter Your Email"
-                        className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-[20px]">
-                    <input
-                      type="password"
-                      placeholder="Enter Your Password"
-                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                    />
-                  </div>
-
-                  <div className="mt-[20px]">
-                    <input
-                      type="password"
-                      placeholder="Confirm Password"
-                      className="w-full h-[55px] sm:h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[15px] sm:text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                    />
-                  </div>
-
-                  <div className="flex items-start mt-[20px]">
-                    <input
-                      id="terms"
-                      type="checkbox"
-                      required
-                      className="w-[22px] h-[22px] mt-[2px] rounded-[6px] accent-[#F4F1EC] flex-shrink-0"
-                    />
-                    <label
-                      htmlFor="terms"
-                      className="ml-[5.5px] text-[14px] sm:text-[16px] leading-6 text-color1"
-                    >
-                      I Agree To The{" "}
-                      <Link
-                        href="#"
-                        className="font-semibold text-color10 hover:text-color-15 transition-colors duration-300"
-                      >
-                        Terms & Conditions
-                      </Link>
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className={`${btnClass} group w-full h-[60px] sm:h-[68px] lg:h-[76px] mt-[20px] bg-color4 flex items-center justify-center text-[15px] sm:text-[16px] font-semibold text-color2`}
-                  >
-                    Create Account
-                    <svg
-                      className="ml-[16px] transition-transform duration-500 ease-in-out group-hover:translate-x-1"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M5 12H19M13 6L19 12L13 18"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-
-                  <div className="flex items-center my-[24px]">
-                    <div className="w-full h-[1px] bg-[#9CA3AF]"></div>
-                    <span className="mx-[14px] sm:mx-[20px] text-[14px] sm:text-[16px] font-medium text-[#9CA3AF]">
-                      OR
-                    </span>
-                    <div className="w-full h-[1px] bg-[#9CA3AF]"></div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between mt-[20px]">
-                    <button
-                      type="button"
-                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66.25px] rounded-[20px] border-2 border-color4 flex items-center justify-center transition-all duration-500 hover:bg-color-15 hover:border-color-15 hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
-                    >
-                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-color4 transition-colors duration-500 group-hover:text-color2">
-                        Continue With
-                      </span>
-                      <svg
-                        className="text-color4 group-hover:text-color2"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.9892 0.000179964C12.0366 0.000280848 12.0841 0.000381732 12.1331 0.000485674C12.815 0.00281232 13.4816 0.0175196 14.1518 0.155241C14.1983 0.164292 14.2448 0.173343 14.2927 0.182669C16.9684 0.713372 19.0749 2.07541 20.9605 3.99372C20.8962 4.13864 20.8225 4.23746 20.7108 4.34921C20.6785 4.38176 20.6462 4.41431 20.6129 4.44786C20.5775 4.48308 20.5421 4.5183 20.5056 4.55458C20.4683 4.59205 20.4309 4.62951 20.3925 4.66812C20.2691 4.79194 20.1453 4.91543 20.0216 5.03892C19.9359 5.12469 19.8503 5.21048 19.7648 5.29629C19.5625 5.49905 19.3599 5.7016 19.1573 5.90404C18.9266 6.13457 18.6962 6.36537 18.4658 6.59618C17.9919 7.0709 17.5176 7.54528 17.0432 8.01945C16.8508 7.93136 16.7265 7.79982 16.5826 7.64788C15.6833 6.72534 14.5724 6.0941 13.3124 5.81934C13.2441 5.80441 13.2441 5.80441 13.1743 5.78917C11.5705 5.48262 9.89012 5.83051 8.53293 6.73526C8.3126 6.88666 8.10442 7.04787 7.90282 7.22366C7.83781 7.27797 7.83781 7.27797 7.77148 7.33338C6.63257 8.32307 5.94644 9.7607 5.75764 11.2494C5.71524 12.0705 5.71865 12.8883 5.94418 13.6835C5.95266 13.7148 5.96114 13.746 5.96988 13.7781C6.21091 14.6458 6.67316 15.4336 7.24994 16.1177C7.28204 16.1563 7.31414 16.1948 7.34722 16.2345C8.40228 17.4599 9.96612 18.1562 11.556 18.3052C13.286 18.4279 14.95 17.8084 16.2504 16.6794C16.8223 16.1641 17.2062 15.5641 17.6028 14.9006C15.7561 14.9006 13.9093 14.9006 12.0066 14.9006C12.0066 13.0315 12.0066 11.1623 12.0066 9.23652C15.854 9.23652 19.7013 9.23652 23.6652 9.23652C24.0261 10.8061 24.1292 12.5627 23.8051 14.1517C23.7961 14.1983 23.7871 14.245 23.7778 14.293C23.3992 16.2164 22.5892 17.9528 21.3802 19.4881C21.3423 19.5367 21.3044 19.5852 21.2654 19.6353C20.6744 20.3642 19.9954 21.0451 19.235 21.5946C19.1815 21.6344 19.1281 21.6744 19.0747 21.7143C18.6927 21.9974 18.2958 22.2495 17.8826 22.484C17.8496 22.5028 17.8166 22.5216 17.7826 22.541C16.7317 23.1349 15.6002 23.5306 14.4229 23.783C14.3798 23.7923 14.3366 23.8016 14.2922 23.8112C13.5364 23.9653 12.7934 23.9995 12.0241 23.9965C11.9529 23.9964 11.9529 23.9964 11.8802 23.9962C11.1984 23.9939 10.5315 23.9796 9.86147 23.8415C9.81425 23.8322 9.76702 23.8229 9.71837 23.8133C7.80204 23.4286 6.07959 22.6122 4.54514 21.4073C4.52 21.3877 4.49486 21.3681 4.46895 21.3479C3.71139 20.7502 3.00951 20.039 2.4466 19.254C2.40687 19.2003 2.3671 19.1467 2.32728 19.0931C2.04526 18.7097 1.79414 18.3113 1.56054 17.8965C1.54179 17.8634 1.52303 17.8303 1.50371 17.7962C0.51149 16.0272 0.046034 14.0404 0.053669 12.0188C0.0537695 11.9711 0.05387 11.9233 0.0539735 11.874C0.0562894 11.1887 0.0703715 10.5185 0.208145 9.84506C0.217411 9.79767 0.226676 9.75027 0.236222 9.70143C0.685976 7.44382 1.73919 5.37184 3.33265 3.71286C3.36364 3.68048 3.39463 3.64809 3.42656 3.61473C3.86651 3.15745 4.31019 2.72675 4.82495 2.35535C4.85035 2.33687 4.87575 2.31839 4.90192 2.29935C6.34365 1.25645 7.94637 0.549693 9.68659 0.190349C9.72066 0.18327 9.75473 0.176191 9.78983 0.168897C10.5217 0.0270435 11.2456 -0.00266194 11.9892 0.000179964Z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      className="group relative overflow-hidden z-10 w-full sm:w-[48%] h-[66.25px] rounded-[20px] border-2 border-color4 flex items-center justify-center transition-all duration-500 hover:bg-color-15 hover:border-color-15 hover:-translate-y-[3px] after:absolute after:top-0 after:left-[-120%] after:w-[50%] after:h-full after:bg-white/40 after:skew-x-[-25deg] after:transition-all after:duration-700 hover:after:left-[150%]"
-                    >
-                      <span className="mr-[12px] lg:mr-[24px] text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-color4 transition-colors duration-500 group-hover:text-color2">
-                        Continue With
-                      </span>
-                      <i className="fa-brands fa-apple text-[24px] text-color4 group-hover:text-white transition-colors"></i>
-                    </button>
-                  </div>
-                  <p className="mt-[28px] sm:mt-[38px] text-center text-[14px] sm:text-[16px] font-medium text-color1">
-                    Already Have An Account?{" "}
-                    <button
-                      type="button"
-                      onClick={openLogin}
-                      className="font-semibold text-color4 hover:text-color-15 transition-colors duration-300"
-                    >
-                      Sign In
-                    </button>
-                  </p>
-                </form>
-              </div>
-            </section>
-          </div>
-        </div>
+        <SignupForm
+          onClose={() => setIsSignupOpen(false)}
+          onSwitchToLogin={openLogin}
+        />
       )}
 
-      {/* LOGIN MODAL */}
       {isLoginOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/30 backdrop-blur-sm py-[20px] lg:py-[36px] flex items-center justify-center">
-          <div className="max-w-[1350px] mx-auto px-[15px] flex items-center justify-center min-h-full w-full">
-            <section className="flex flex-col lg:flex-row lg:flex-nowrap w-full max-w-[1320px] bg-color2 rounded-[20px] overflow-hidden shadow-[0px_4px_52.7px_0px_#FFFFFF]">
-              <div className="relative z-0 w-full lg:w-1/2 shrink-0 min-h-[260px] sm:min-h-[380px] lg:min-h-[821px] bg-[linear-gradient(180deg,_#DDF0FC_13%,_#2772CC_86%)] overflow-hidden rounded-none lg:rounded-tr-[70px] lg:rounded-br-[70px] flex items-center justify-center p-6 lg:p-0">
-                <span className="absolute top-[36px] left-[42px] w-[128px] h-[32px] rounded-full bg-white/20"></span>
-                <span className="absolute top-[58px] right-[92px] w-[192px] h-[40px] rounded-full bg-white/20"></span>
-                <figure className="w-[220px] sm:w-[320px] md:w-[420px] lg:w-[560px] max-w-full">
-                  <img
-                    src={loginIllus.src}
-                    alt="Login Illustration"
-                    className="block w-full h-auto object-contain"
-                  />
-                </figure>
-              </div>
-
-              <div className="w-full lg:w-1/2 shrink-0 min-w-0 bg-color2 pt-[30px] pb-[35px] px-[20px] sm:px-[35px] md:px-[50px] lg:px-[94px]">
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setIsLoginOpen(false)}
-                    className="text-[24px] font-semibold text-color10 hover:text-gray-600 transition-colors duration-300"
-                  >
-                    &times;
-                  </button>
-                </div>
-                <div className="mt-[5px]">
-                  <h2 className="text-[32px] font-semibold leading-none text-color10 font-[family-name:var(--outfit-r)]">
-                    Welcome Back
-                  </h2>
-                  <p className="mt-[12px] text-[16px] text-color1">
-                    Login to continue your account.
-                  </p>
-                </div>
-
-                <form className="mt-[44px]">
-                  <div className="mt-[20px]">
-                    <input
-                      type="email"
-                      placeholder="Enter Your Email"
-                      required
-                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                    />
-                  </div>
-                  <div className="mt-[20px]">
-                    <input
-                      type="password"
-                      placeholder="Enter Your Password"
-                      required
-                      className="w-full h-[59px] p-[20px] bg-transparent border-0 border-b-2 border-color4 rounded-b-[20px] outline-none text-[16px] font-medium placeholder:text-color1 focus:border-color5 transition-all duration-300 text-black"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between mt-[24px]">
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="w-[20px] h-[20px] accent-color4"
-                      />
-                      <span className="ml-[10px] text-[15px] text-color1">
-                        Remember Me
-                      </span>
-                    </label>
-                    <a
-                      href="#"
-                      className="text-[15px] font-medium text-color4 hover:text-color-15 transition-all duration-300"
-                    >
-                      Forgot Password?
-                    </a>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className={`${btnClass} w-full h-[60px] lg:h-[76px] mt-[20px] bg-color4 flex items-center justify-center text-[18px] font-semibold text-white`}
-                  >
-                    Login
-                    <svg
-                      className="ml-[16px] transition-transform duration-500 group-hover:translate-x-1"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M5 12H19M13 6L19 12L13 18"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-
-                  <div className="flex items-center my-[24px]">
-                    <div className="w-full h-[1px] bg-[#9CA3AF]"></div>
-                    <span className="mx-[20px] text-[16px] font-medium text-[#9CA3AF]">
-                      OR
-                    </span>
-                    <div className="w-full h-[1px] bg-[#9CA3AF]"></div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-between mt-[20px]">
-                    <button
-                      type="button"
-                      className="group w-full sm:w-[48%] mb-[15px] sm:mb-0 h-[66px] rounded-[20px] border-2 border-color4 flex items-center justify-center hover:bg-color-15 hover:border-color-15 transition-all duration-500"
-                    >
-                      <span className="text-[14px] font-semibold text-color4 group-hover:text-color2 capitalize">
-                        continue of Google
-                      </span>
-                      <img
-                        src={googleIcon.src}
-                        alt="google"
-                        className="object-contain ms-[12px] w-5 h-5"
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      className="group w-full sm:w-[48%] h-[66px] rounded-[20px] border-2 border-color4 flex items-center justify-center hover:bg-color-15 hover:border-color-15 transition-all duration-500"
-                    >
-                      <span className="text-[14px] font-semibold text-color4 group-hover:text-color2">
-                        Continue with
-                      </span>
-                      <i className="fa-brands fa-apple text-[24px] ms-[12px] text-color4 group-hover:text-white transition-colors"></i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </section>
-          </div>
-        </div>
+        <LoginForm
+          onClose={() => setIsLoginOpen(false)}
+          onSwitchToSignup={openSignup}
+        />
       )}
     </>
   );

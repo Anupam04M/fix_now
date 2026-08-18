@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { ArrowUpRight } from "lucide-react";
 import { Autoplay, Navigation, FreeMode } from "swiper/modules";
 
 // Image Imports
@@ -42,6 +43,19 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import Image from "next/image";
+import AC from "../../assets/images/Frame 677 (1).png";
+import Refrigerator from "../../assets/images/Frame 677.png";
+import Washing_Machine from "../../assets/images/Frame 677 (2).png";
+import Microwave from "../../assets/images/Frame 677 (3).png";
+import Water_Purifier from "../../assets/images/Frame 677 (4).png";
+import Television from "../../assets/images/Frame 677 (5).png";
+
+import Light from "../../assets/images/light.png";
+import Ceiling_Fan from "../../assets/images/fan.png";
+import Switches_Sockets from "../../assets/images/switch.png";
+import Wiring from "../../assets/images/Wiring.png";
+import MCB_Fuse from "../../assets/images/MCB.png";
+import Inverter from "../../assets/images/Frame 677.png";
 
 // --- DATA ARRAYS ---
 
@@ -239,21 +253,21 @@ const faqs = [
 ];
 
 const applianceServices = [
-  { img: "/assets/images/Frame 677 (1).png", title: "AC" },
-  { img: "/assets/images/Frame 677.png", title: "Refrigerator" },
-  { img: "/assets/images/Frame 677 (2).png", title: "Washing Machine" },
-  { img: "/assets/images/Frame 677 (3).png", title: "Microwave" },
-  { img: "/assets/images/Frame 677 (4).png", title: "Water Purifier" },
-  { img: "/assets/images/Frame 677 (5).png", title: "Television" },
+  { img: AC, title: "AC" },
+  { img: Refrigerator, title: "Refrigerator" },
+  { img: Washing_Machine, title: "Washing Machine" },
+  { img: Microwave, title: "Microwave" },
+  { img: Water_Purifier, title: "Water Purifier" },
+  { img: Television, title: "Television" },
 ];
 
 const electricalServices = [
-  { img: "/assets/images/light.png", title: "Light" },
-  { img: "/assets/images/fan.png", title: "Ceiling Fan" },
-  { img: "/assets/images/switch.png", title: "Switches & Sockets" },
-  { img: "/assets/images/Wiring.png", title: "Wiring" },
-  { img: "/assets/images/MCB.png", title: "MCB/Fuse" },
-  { img: "/assets/images/Frame 677.png", title: "Inverter" },
+  { img: Light, title: "Light" },
+  { img: Ceiling_Fan, title: "Ceiling Fan" },
+  { img: Switches_Sockets, title: "Switches & Sockets" },
+  { img: Wiring, title: "Wiring" },
+  { img: MCB_Fuse, title: "MCB/Fuse" },
+  { img: Inverter, title: "Inverter" },
 ];
 
 // --- MAIN COMPONENT ---
@@ -326,7 +340,10 @@ export default function Home() {
                     </button>
                   </div>
                   <button className="group w-[48px] h-[48px] ml-[18px] rounded-full bg-color4 flex items-center justify-center text-white border border-color4 transition-all hover:bg-white hover:text-color4 shadow-md shrink-0">
-                    <i className="fa-solid fa-arrow-up-right transition-transform duration-300 group-hover:rotate-45"></i>
+                    <ArrowUpRight
+                      className="transition-transform duration-300 group-hover:rotate-45"
+                      size={24}
+                    />
                   </button>
                 </div>
 
@@ -640,63 +657,81 @@ export default function Home() {
         </section>
 
         {/* ================= WHY CHOOSE US ================= */}
-        {/* WHY CHOOSE US */}
-        <section className="py-[80px] sm:py-[90px] md:py-[100px] lg:py-[106px]">
-          <div className="max-w-[1350px] px-[15px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
-            <div className="col-span-12 lg:col-span-6 flex justify-center flex-col">
-              <p className="text-color-15 font-medium capitalize mb-[10px] text-[18px] sm:text-[20px] font-outfit">
+        <section className="py-[60px] sm:py-[90px] md:py-[100px] lg:py-[106px] overflow-hidden">
+          {/* FIX: Increased padding (px-[24px] on mobile, up to px-[40px] on tablet/desktop) to give healthy space on both sides */}
+          <div className="max-w-[1350px] px-[24px] md:px-[40px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 w-full">
+            {/* Left Content Area */}
+            {/* FIX: Changed from center-aligned to left-aligned on mobile (text-left) to match the "Popular Services" design */}
+            <div className="col-span-12 lg:col-span-6 flex justify-center flex-col text-left">
+              <p className="text-color-15 font-medium capitalize mb-[10px] text-[16px] sm:text-[18px] lg:text-[20px] font-outfit">
                 Why choose Us
               </p>
-              <h2 className="text-[22px] sm:text-[26px] md:text-[32px] lg:text-[42px] leading-[1.2] font-semibold text-color10 font-outfit">
+              <h2 className="text-[26px] sm:text-[32px] md:text-[36px] lg:text-[42px] leading-[1.3] lg:leading-[1.2] font-semibold text-color10 font-outfit">
                 Trusted Professionals. Seamless Experience. Reliable Service.
               </h2>
-              <p className="text-black mt-[20px] sm:mt-[24px] text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.6] max-w-full lg:max-w-[600px]">
+              <p className="text-black mt-[16px] sm:mt-[24px] text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.6] max-w-full lg:max-w-[600px]">
                 At FIXNOW, we simplify everyday living by connecting you with
                 verified local professionals who deliver quality service,
                 transparent pricing, and dependable support—every time.
               </p>
               <button
-                className={`${cmnBtnClasses} w-fit mt-[20px] sm:mt-[24px] py-[14px] px-[30px] sm:py-[16px] sm:px-[48px]`}
+                className={`${cmnBtnClasses} w-fit mt-[20px] sm:mt-[24px] py-[12px] px-[24px] sm:py-[16px] sm:px-[48px]`}
               >
                 Contact Us{" "}
                 <i className="fa-solid fa-arrow-right ml-2 text-white"></i>
               </button>
             </div>
 
-            <div className="col-span-12 lg:col-span-6">
+            {/* Right Swiper Area */}
+            {/* Added a slight top margin (mt-6 lg:mt-0) to separate the button from the slider on mobile */}
+            <div className="col-span-12 lg:col-span-6 h-[500px] sm:h-[600px] lg:h-[700px] w-full mt-6 lg:mt-0">
               <Swiper
                 modules={[Autoplay]}
                 direction="vertical"
-                slidesPerView={3}
                 centeredSlides={true}
-                spaceBetween={120}
                 loop={true}
                 speed={1000}
                 autoplay={{ delay: 2000, disableOnInteraction: false }}
-                className="mySwiper h-[700px] w-full lg:max-w-[584px]"
+                className="mySwiper w-full h-full lg:max-w-[584px]"
+                breakpoints={{
+                  320: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 120,
+                  },
+                }}
               >
-                {/* Fixed array to 5 items to match HTML */}
                 {[1, 2, 3, 4, 5].map((item) => (
                   <SwiperSlide
                     key={item}
-                    className="flex justify-center items-center"
+                    className="flex justify-center items-center w-full"
                   >
-                    <div className="flex w-full max-w-full lg:w-[584px] lg:h-[303px] items-center rounded-[25px] overflow-hidden justify-center bg-white shadow-md">
-                      <div className="w-3/5 px-[30px] py-[30px] lg:px-[50px] lg:py-[50px] bg-[linear-gradient(to_right,#DDF0FC_0%,#FFFFFF_100%)] h-full">
-                        {/* Fixed Gradient Text exactly like HTML */}
-                        <p className="font-outfit text-[56px] font-bold bg-[linear-gradient(to_top,#fff_1%,#3089E0_95%)] bg-clip-text text-transparent mb-[11px]">
+                    {/* Card Wrapper */}
+                    <div className="flex flex-col-reverse sm:flex-row w-full max-w-[340px] sm:max-w-full lg:w-[584px] h-auto sm:h-[220px] lg:h-[303px] items-center rounded-[20px] lg:rounded-[25px] overflow-hidden justify-center bg-white shadow-md mx-auto">
+                      {/* Text Section */}
+                      <div className="w-full sm:w-3/5 px-[20px] py-[20px] sm:px-[30px] sm:py-[20px] lg:px-[50px] lg:py-[50px] bg-[linear-gradient(to_right,#DDF0FC_0%,#FFFFFF_100%)] h-full flex flex-col justify-center">
+                        <p className="font-outfit text-[40px] sm:text-[46px] lg:text-[56px] font-bold bg-[linear-gradient(to_top,#fff_1%,#3089E0_95%)] bg-clip-text text-transparent mb-[4px] lg:mb-[11px] leading-none">
                           0{item}
                         </p>
 
-                        <p className="text-black font-outfit text-[20px] font-bold whitespace-nowrap mb-[20px]">
+                        <p className="text-black font-outfit text-[16px] sm:text-[18px] lg:text-[20px] font-bold whitespace-nowrap mb-[8px] lg:mb-[20px]">
                           Transparent Pricing
                         </p>
-                        <p className="font-albert font-normal text-[14px] lg:text-[16px] text-black">
+                        <p className="font-albert font-normal text-[13px] sm:text-[14px] lg:text-[16px] text-black leading-tight sm:leading-normal">
                           Know exactly what you're paying before confirming your
                           booking. No hidden charges, no unexpected surprises.
                         </p>
                       </div>
-                      <div className="w-2/5 h-full">
+
+                      {/* Image Section */}
+                      <div className="w-full sm:w-2/5 h-[140px] sm:h-full">
                         <Image
                           src={Frame76}
                           alt="Feature"
@@ -1003,7 +1038,7 @@ export default function Home() {
                     className="col-span-2 min-h-[180px] rounded-[15px] shadow-[5px_0_10.1px_0_#F3F4F6] p-[10px] relative flex flex-col justify-center items-center hover:bg-gray-50 cursor-pointer transition-colors border border-gray-100"
                   >
                     <figure>
-                      <img
+                      <Image
                         src={item.img}
                         alt={item.title}
                         className="w-full object-contain max-h-[80px] mb-2"
@@ -1038,7 +1073,7 @@ export default function Home() {
                     className="col-span-2 min-h-[180px] rounded-[15px] shadow-[5px_0_10.1px_0_#F3F4F6] p-[10px] relative flex flex-col justify-center items-center hover:bg-gray-50 cursor-pointer transition-colors border border-gray-100"
                   >
                     <figure>
-                      <img
+                      <Image
                         src={item.img}
                         alt={item.title}
                         className="w-full object-contain max-h-[80px] mb-2"
