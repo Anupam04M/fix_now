@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -33,9 +33,8 @@ export default function SignupForm({
     reset,
     formState: { errors },
   } = useForm<SignupPayload>({
-    resolver: yupResolver(signupSchema),
+    resolver: yupResolver(signupSchema) as Resolver<SignupPayload>,
   });
-
   const onSubmit = async (data: SignupPayload) => {
     try {
       const res = await signupUser(data, "customer");
@@ -52,7 +51,7 @@ export default function SignupForm({
       const err = error as { message: string };
       console.log("error in signup form ", err.message);
       toast.error(err.message || "Something went wrong");
-      return err.message;
+      
     }
   };
 
@@ -115,7 +114,7 @@ export default function SignupForm({
                 <input
                   id="terms"
                   type="checkbox"
-                  {...register("terms" as any)} // Handled by Yup validation schema
+                  {...register("terms")}
                   className="w-[22px] h-[22px] mt-[2px] rounded-[6px] accent-[#F4F1EC] flex-shrink-0"
                 />
                 <label
@@ -132,10 +131,9 @@ export default function SignupForm({
                 </label>
               </div>
               {/* Display Yup validation error for terms if applicable */}
-              {(errors as any).terms && (
+              {errors.terms && (
                 <span className="text-red-500 text-sm mt-1 block">
-                  {(errors as any).terms?.message ||
-                    "You must agree to the terms."}
+                  {errors.terms.message || "You must agree to the terms."}
                 </span>
               )}
 

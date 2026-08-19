@@ -77,7 +77,7 @@ const Service_Category = () => {
   const [categories, setCategories] = useState(categoriesData);
   const router = useRouter();
 
-  const toggleStatus = (id) => {
+  const toggleStatus = (id:number) => {
     setCategories((prev) =>
       prev.map((cat) =>
         cat.id === id ? { ...cat, isToggled: !cat.isToggled } : cat,
