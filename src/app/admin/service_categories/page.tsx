@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import avatar from "../../../assets/images/admin/avatar.jpg";
+import { useRouter } from "next/navigation";
 
 const Service_Category = () => {
   // Dummy data based on the Figma image
@@ -74,8 +75,9 @@ const Service_Category = () => {
   ];
 
   const [categories, setCategories] = useState(categoriesData);
+  const router = useRouter();
 
-  const toggleStatus = (id) => {
+  const toggleStatus = (id:number) => {
     setCategories((prev) =>
       prev.map((cat) =>
         cat.id === id ? { ...cat, isToggled: !cat.isToggled } : cat,
@@ -114,7 +116,7 @@ const Service_Category = () => {
           </button>
 
           <div className="flex items-center gap-3 pl-2 md:pl-4 border-l border-gray-200 cursor-pointer">
-            <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+            <div className="h-12 w-12 overflow-hidden rounded-full bg-gray-200">
               {/* Replace src with your actual user avatar path */}
               <Image
                 src={avatar}
@@ -217,7 +219,12 @@ const Service_Category = () => {
         </div>
 
         {/* Add Button */}
-        <button className="flex h-10 items-center justify-center gap-2 rounded-lg bg-[#1E57A8] px-5 text-sm font-medium text-white hover:bg-[#154385] transition-colors shadow-sm">
+        <button
+          className="flex h-10 items-center justify-center gap-2 rounded-lg
+         bg-[#1E57A8] px-5 text-sm font-medium text-white hover:bg-[#154385]
+          transition-colors shadow-sm"
+          onClick={() => router.push("/admin/service_categories/add_category")}
+        >
           Add Categories
           <Plus size={16} />
         </button>

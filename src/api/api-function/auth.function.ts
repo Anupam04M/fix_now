@@ -11,6 +11,7 @@ export const signupFns = async (
     const apiPayload = {
       name: `${payload.firstName} ${payload.lastName}`.trim(),
       email: payload.email,
+      phone: payload.phone,
       password: payload.password,
       password_confirmation: payload.confirmPassword,
       device_name: "web-client", // Required by the API for tracking

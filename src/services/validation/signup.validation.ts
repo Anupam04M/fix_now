@@ -10,11 +10,14 @@ export const signupSchema = yup.object().shape({
     .required("Email is required."),
   password: yup
     .string()
-    .min(8, "Password must be at least 8 characters long.") // Updated to standard security practices
+    .min(8, "Password must be at least 8 characters long.")
     .required("Password is required."),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match.")
     .required("Please confirm your password."),
-    terms: yup.boolean().oneOf([true], "You must agree to the terms and conditions."),
+  terms: yup.boolean().oneOf([true], "You must agree to the terms and conditions."),
 });
+
+// Delete your old manual interface and replace it with this:
+export type SignupPayload = yup.InferType<typeof signupSchema>;
