@@ -1,0 +1,61 @@
+$kind: http-request
+description: |-
+  ### Update Default Address
+
+  This endpoint allows users to update an existing address and set it as the default address for the customer.
+
+  #### HTTP Method
+
+  `PATCH`
+
+  #### URL
+
+  `{{base_url}}/customer/addresses/{{address_id}}/default`
+
+  #### Request Parameters
+
+  The request requires the following parameters to be included in the body:
+
+  - **address_id** (string): The unique identifier of the address that you want to set as default.
+      
+
+  The request body should be formatted as `application/json` and may include the following fields:
+
+  - **is_default** (boolean): Indicates whether the specified address should be marked as the default address.
+      
+
+  #### Response Structure
+
+  Upon a successful request, the API will return a response with the following structure:
+
+  - **status** (string): The status of the operation (e.g., "success").
+      
+  - **message** (string): A message providing additional information about the operation.
+      
+  - **data** (object): Contains the updated address details, including:
+      
+      - **address_id** (string): The unique identifier of the address.
+          
+      - **is_default** (boolean): The updated default status of the address.
+          
+
+  #### Example Response
+
+  ``` json
+  {
+    "status": "success",
+    "message": "Address updated successfully.",
+    "data": {
+      "address_id": "12345",
+      "is_default": true
+    }
+  }
+
+   ```
+
+  This endpoint is crucial for managing customer addresses effectively, ensuring that users can easily designate their preferred address for future transactions.
+url: "{{base_url}}/customer/addresses/{{address_id}}/default"
+method: PATCH
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 5000

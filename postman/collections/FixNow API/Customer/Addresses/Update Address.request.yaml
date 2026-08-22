@@ -1,0 +1,51 @@
+$kind: http-request
+description: |-
+  ### Update Customer Address Landmark
+
+  This endpoint allows you to update the landmark of a specific customer address identified by the `address_id`.
+
+  #### Request
+
+  - **Method**: PATCH
+      
+  - **URL**: `{{base_url}}/customer/addresses/{{address_id}}`
+      
+
+  #### Request Body
+
+  The request body must be in JSON format and should include the following parameter:
+
+  - **landmark** (string): The new landmark description for the address.
+      
+
+  #### Example Request Body
+
+  ``` json
+  {
+    "landmark": "Updated Landmark"
+  }
+
+   ```
+
+  #### Response
+
+  Upon a successful request, the API will return a response indicating the status of the update operation. The structure of the response typically includes:
+
+  - **status** (string): A message indicating the success or failure of the update.
+      
+  - **updatedAddress** (object): An object containing the updated address details.
+      
+
+  Make sure to handle any potential errors that may arise, such as invalid `address_id` or malformed request body.
+url: "{{base_url}}/customer/addresses/{{address_id}}"
+method: PATCH
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "landmark": "Updated Landmark"
+    }
+order: 4000

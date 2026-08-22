@@ -1,0 +1,129 @@
+$kind: http-request
+description: |-
+  ## Endpoint: Retrieve User Information
+
+  ### Method
+
+  `GET`
+
+  ### URL
+
+  `{{base_url}}/auth/me`
+
+  ### Description
+
+  This endpoint retrieves the authenticated user's information. It requires an Authorization header containing a Bearer token for authentication. The response will include details about the user such as their ID, name, email, phone number, role, status, and avatar.
+
+  ### Request Headers
+
+  - **Authorization**: `Bearer {token}` (required)
+      
+
+  ### Expected Response
+
+  - **Status Code**: `200 OK`
+      
+  - **Content-Type**: `application/json`
+      
+
+  #### Response Body
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "id": 0,
+      "name": "",
+      "email": "",
+      "phone": null,
+      "role": "",
+      "status": "",
+      "avatar": null
+    }
+  }
+
+   ```
+
+  ### Response Fields
+
+  - **success**: Indicates if the request was successful (boolean).
+      
+  - **message**: Additional information about the request (string).
+      
+  - **data**: Object containing user details:
+      
+      - **id**: Unique identifier for the user (integer).
+          
+      - **name**: Name of the user (string).
+          
+      - **email**: Email address of the user (string).
+          
+      - **phone**: Phone number of the user (nullable string).
+          
+      - **role**: Role of the user in the system (string).
+          
+      - **status**: Current status of the user (string).
+          
+      - **avatar**: URL or path to the user's avatar image (nullable string).
+          
+
+  This endpoint retrieves the current authenticated user's information.
+
+  ### Request
+
+  - **Method**: `GET`
+      
+  - **Endpoint**: `{{base_url}}/auth/me`
+      
+
+  ### Response
+
+  Upon a successful request, the server responds with a `200 OK` status and a JSON object containing the following fields:
+
+  - `success` (boolean): Indicates whether the request was successful.
+      
+  - `message` (string): A message providing additional context (usually empty).
+      
+  - `data` (object): Contains the user's details:
+      
+      - `id` (integer): The unique identifier of the user.
+          
+      - `name` (string): The name of the user.
+          
+      - `email` (string): The email address of the user.
+          
+      - `phone` (string or null): The phone number of the user, if available.
+          
+      - `role` (string): The role assigned to the user.
+          
+      - `status` (string): The current status of the user.
+          
+      - `avatar` (string or null): The URL to the user's avatar image, if available.
+          
+
+  ### Example Response
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "id": 0,
+      "name": "",
+      "email": "",
+      "phone": null,
+      "role": "",
+      "status": "",
+      "avatar": null
+    }
+  }
+
+   ```
+
+  This endpoint is useful for applications that need to display user-specific information after authentication.
+url: "{{base_url}}/auth/me"
+method: GET
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 5000

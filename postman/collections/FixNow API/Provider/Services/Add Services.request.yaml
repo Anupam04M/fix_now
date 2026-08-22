@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{base_url}}/provider/services"
+method: POST
+headers:
+  Authorization: Bearer {{provider_token}}
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r\n  \"service_id\": 16\r\n}"
+order: 2000

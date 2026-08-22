@@ -68,6 +68,42 @@
   animation: loading 3s ease forwards;
 }
 
+/* Booking status pills (from FIX_Now css/booking-history.css) */
+.gradient-btn,
+.gradient-btn1,
+.gradient-btn2,
+.gradient-btn3 {
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+}
+
+.gradient-btn {
+  background:
+    linear-gradient(-90deg, #ffffff 36%, #ffe28a 80%) padding-box,
+    linear-gradient(-19deg, #fff 0%, #ffc233 100%) border-box;
+}
+
+.gradient-btn1 {
+  background:
+    linear-gradient(-90deg, #ffffff 36%, #45a5ec 80%) padding-box,
+    linear-gradient(-19deg, #fff 0%, #45a5ec 100%) border-box;
+}
+
+.gradient-btn2 {
+  background:
+    linear-gradient(90deg, #ffffff 2%, #22c55e 98%) padding-box,
+    linear-gradient(-19deg, #fff 0%, #22c55e 100%) border-box;
+}
+
+.gradient-btn3 {
+  background:
+    linear-gradient(90deg, #ffffff 6%, #dc2626 100%) padding-box,
+    linear-gradient(-19deg, #fff 0%, #dc2626 100%) border-box;
+}
+
 /* ====================================================== */
 /* Swiper vertical rotation & stacking logic              */
 /* ====================================================== */

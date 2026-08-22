@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{base_url}}/auth/register/provider"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Rahul Sharma",
+      "email": "provider+qa@example.com",
+      "password": "Password123!",
+      "password_confirmation": "Password123!",
+      "device_name": "postman-provider"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.token) pm.collectionVariables.set('provider_token', json.data.token);
+    language: text/javascript
+order: 3000

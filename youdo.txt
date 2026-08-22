@@ -1,0 +1,349 @@
+================================================================
+youdo.txt — Fix Now  ·  WORK-WITH-US PAGE: FIX TO MATCH HTML
+================================================================
+Goal: make src/app/(customerpanel)/work-with-us/page.tsx match
+E:\Service-SDLC\FIx_Now_HTML\FIX_Now\work-with-us.html exactly —
+same sections, same order, same animations, same spacing "piece by
+piece". Below is every difference found between the current React
+page and the static HTML, in priority order.
+
+Sources used:
+  - FIX_Now_HTML/FIX_Now/work-with-us.html (source of truth)
+  - FIX_Now_HTML/FIX_Now/css/style.css (.heading-1/.heading-2, vars)
+  - src/app/globals.css (theme tokens already match: color-color1..17)
+  - src/app/(customerpanel)/page.tsx (loader pattern to copy)
+  - src/app/(customerpanel)/work-with-us/page.tsx (file to change)
+
+Token mapping already correct (HTML var -> Tailwind class):
+  --color1=#6b7280 -> color1   --color4=#2772cc -> color4
+  --color5=#244f84 -> color5   --color7=#99d7f7 -> color7
+  --color8=#f3f4f8 -> color8   --color9=#1f2937 -> color9
+  --color10=#1a3151 -> color10 --color11=#e5e7eb -> color11
+  --color12=#45a5ec -> color12 --color13=#d97706 -> color13
+  --color-14=#f0f9fe -> color-14 --color-15=#f59e0b -> color-15
+  --color-16=#fbbf24 -> color-16 --color-17=#d1d5db -> color-17
+
+AOS is NOT used on this page (no data-aos attributes in
+work-with-us.html — those only exist in about.us.html). Do NOT
+install the aos package for this page.
+
+----------------------------------------------------------------
+1. COPY THE MISSING HERO IMAGE (required — asset does not exist yet)
+----------------------------------------------------------------
+HTML hero uses: assets/images/hpw-it-works/Frame_947.png
+The fix_now assets folder does NOT have Frame_947.png (current page
+instead uses a text-only gradient banner, so the image was never
+copied). Copy:
+  FIX_Now_HTML/FIX_Now/assets/images/hpw-it-works/Frame_947.png
+into:
+  src/assets/images/hpw-it-works/Frame_947.png
+
+----------------------------------------------------------------
+2. REPLACE THE PAGE BANNER WITH THE REAL HERO SECTION (required)
+   File: work-with-us/page.tsx, lines 157-171
+----------------------------------------------------------------
+Delete the current gradient banner and recreate the HTML hero:
+  - <section class="py-[60px] lg:py-[100px] bg-color2 overflow-hidden">
+  - Inside: <div class="relative w-full min-h-[600px]
+            bg-[url('/images/hpw-it-works/Frame_947.png')]
+             bg-contain bg-center bg-no-repeat">
+  - Overlay text, absolutely centered:
+      <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                w-full text-center capitalize z-10
+                font-outfit text-[56px] font-bold leading-[1.2] text-color5">
+        Your Skills.<br />Our Platform.<br />
+        <span class="text-color13">More Opportunities</span>.
+      </p>
+  Notes:
+  - .heading-1 = Outfit, 56px, 700, lh 1.2, capitalize, color5
+    (style.css lines 96-104). The HTML also has a broken class
+    "text-var[--color2]" on the <p> which does nothing — ignore it.
+  - Since next/image is not used anywhere on this page, keep plain
+    <img>/background-image via Tailwind arbitrary bg-[url(...)].
+  - Verify the image resolves: put the file under
+    src/assets/images/hpw-it-works and use the same import pattern as
+    the other images (whyImg1 etc.) then apply it as a bg url, OR use
+    the public/ folder path. Match how the rest of the project loads
+    static assets (imports are the existing convention here).
+
+----------------------------------------------------------------
+3. ADD THE "GROW YOUR BUSINESS WITH US" CTA SECTION (required —
+   section is missing entirely; HTML lines 1042-1109)
+   File: work-with-us/page.tsx, insert BETWEEN the "How It Works"
+   section (ends line 443) and the "Earning Overview" section
+   (starts line 445)
+----------------------------------------------------------------
+Structure:
+  - <section class="relative py-[70px] lg:py-[100px] overflow-hidden">
+      <div class="max-w-[1320px] px-[15px] mx-auto bg-[#F0F9FE]
+                  min-h-[300px] w-full">
+        <div class="grid grid-cols-12 px-[122px] py-[66px] gap-5">
+          LEFT (col-span-8, min-h-[320px], relative, py-[44px]):
+            <p class="font-outfit text-color5 font-medium text-[24px]
+                      capitalize">GROW YOUR BUSINESS WITH US</p>
+            <p class="text-[42px] leading-[1.25] text-color9
+                      font-outfit font-medium capitalize">
+              Get More Customers <br /> Grow Your Business</p>
+            arrow SVG absolutely positioned bottom-right of the card
+            (absolute right-0 bottom-0) — copy the base64 "curved
+            arrow" SVG block verbatim from HTML lines 1071-1079.
+          RIGHT (col-span-4, min-h-[320px], flex justify-center
+                items-center):
+            <a href="#" class="inline-block py-[16px] px-[36px]
+                 bg-color4 rounded-[20px] text-white flex gap-1.5">
+              Join As A Provvider
+              <svg> (the 18x18 arrow SVG from HTML lines 1091-1100) </svg>
+            </a>
+  - Keep the exact "Provvider" typo — it is in the HTML source.
+  - The two inline SVGs (big 112x48 base64 arrow + 18x18 arrow) can
+    be copied verbatim; they are self-contained data URIs.
+
+----------------------------------------------------------------
+4. ANIMATED EARNING COUNTER (required — HTML lines 1284-1289 +
+   counter script lines 2913-2966; React hardcodes "48,320")
+   File: work-with-us/page.tsx, lines 500-503
+----------------------------------------------------------------
+HTML behaviour:
+  - <span id="counter" class="text-[52px] leading-none">0</span>
+  - JS: target = 48320, duration = 2000ms, requestAnimationFrame
+    count-up, text = Math.floor(progress*target).toLocaleString("en-IN"),
+    starts via IntersectionObserver threshold 0.5, runs ONCE.
+React equivalent: add state (e.g. const [amount, setAmount] = useState(0))
++ a useEffect with an IntersectionObserver on the span (or the
+section) that, when 50% visible and not yet started, runs the same
+rAF loop and sets the formatted value. Start from 0 and end at
+"48,320" (en-IN formatting). Keep the ₹ span (34px) next to it.
+
+----------------------------------------------------------------
+5. BENEFIT CARD HOVER "ROTATING OVERLAY" ANIMATION (required —
+   HTML lines 838-889; current React cards have no hover effect)
+   File: work-with-us/page.tsx, lines 313-358
+----------------------------------------------------------------
+HTML card wrapper:  relative sm:col-span-4 cursor-pointer
+HTML inner card (the rounded box) has:
+  group relative isolate rounded-[16px] ...
+  before:content-[''] before:absolute before:inset-0 before:-z-10
+  before:w-full before:h-full before:rounded-[16px]
+  before:bg-[#2772cc] before:opacity-0 before:transition-all
+  before:duration-500 before:ease-in-out
+  hover:before:opacity-30 hover:before:rotate-[40deg]
+  - Card 1 & 3: before:bg-[#2772cc]
+  - Card 2 (highlighted): before:bg-color13
+And the h6 + p inside get "relative z-10" so text stays above the
+overlay.
+Changes to make in the React cards:
+  - add cursor-pointer to each card wrapper (line 313, 329, 345)
+  - add "group relative isolate" to the inner card div
+  - add the full "before:" + hover chain above
+  - add "relative z-10" to the <h6> and <p> inside each card
+  - optionally switch the grid to sm:grid-cols-12 with
+    sm:col-span-4 per card to match HTML exactly (visual result is
+    the same as the current sm:grid-cols-3).
+
+----------------------------------------------------------------
+6. FAQ ACCORDION — DEFAULT STATE + HEIGHT ANIMATION (required —
+   HTML initial state lines 2869-2897 + resize fix 2899-2911)
+   File: work-with-us/page.tsx, lines 153, 601, 654-664
+----------------------------------------------------------------
+a) Default state (line 153): HTML starts with ALL items closed
+   (updateFAQ() is run for every item, none get "active").
+   Change useState<number>(0) -> useState<number>(-1).
+b) Max-height (line 657): HTML sets answer.style.maxHeight =
+   answer.scrollHeight + "px" (measured), NOT a hardcoded 300px.
+   Fix: in the answer div, use a ref and set
+   style.maxHeight = isOpen ? `${el.scrollHeight}px` : "0px".
+   Keep transition-[max-height] duration-[350ms] ease-in-out.
+c) Resize handler: HTML re-measures the open item on window resize
+   (lines 2899-2911). Add a window resize listener that updates the
+   open answer's maxHeight to its scrollHeight. Use a layout effect
+   to avoid a flash.
+d) Item spacing (line 601): HTML has NO gap between faq-items (they
+   are stacked block divs inside the wrapper). Current React has
+   gap-[8px]. Remove the gap so items touch edge-to-edge.
+e) Everything else in the FAQ already matches (colors, icon
+   rotation, outline, number column, pl-[58px] answer indent).
+
+----------------------------------------------------------------
+7. TESTIMONIAL QUOTE-BUBBLE WIDTHS (minor — HTML lines 1375, 1427,
+   1480, 1532, 1585, 1637; current React Testimonial uses a fixed
+   w-[150px] top-[20px] for all 6 cards)
+   File: work-with-us/page.tsx, lines 74-111
+----------------------------------------------------------------
+HTML per-card bubble (class + offset differs per card):
+  1. Priya (left)      : left-[32px] top-[20px] w-[145px]
+  2. Amit top (center) : left-[32px] top-[22px] w-[150px]
+  3. Vikram (right)    : right-0    top-[22px] w-[150px]
+  4. Amit (center)     : left-[35px] top-[23px] w-[155px]
+  5. Rahul (bottom L)  : left-[32px] top-[22px] w-[150px]
+  6. Neha (bottom R)   : right-0    top-[22px] w-[150px]
+Fix: pass width + top offset into the Testimonial component
+(extra props or per-card overrides) instead of hardcoding
+w-[150px] top-[20px]. The avatar position, quote-bubble badge
+(bg-[#3186d8], left-[-5px] top-[43px] w-[16px] h-[16px]) and the
+name/★-5.0 layout already match.
+
+----------------------------------------------------------------
+8. LOADER (recommended — present in the HTML body on every page,
+   lines 30-46, and already implemented on the home page)
+   File: work-with-us/page.tsx (top of the component)
+----------------------------------------------------------------
+The current work-with-us page renders no loader. Copy the exact
+pattern already used in src/app/(customerpanel)/page.tsx
+(lines 275-301):
+  - const [loading, setLoading] = useState(true);
+  - useEffect: setTimeout(() => setLoading(false), 2000);
+  - render {loading && (<div className="fixed inset-0 z-[999999]
+    flex flex-col items-center justify-center bg-white
+    transition-opacity duration-500"> ... "Fix"+"Now" wordmark
+    (text-color4 + text-color-15) + .loader-progress bar ... )}
+  - wrap the <main> content in a div hidden while loading
+    (style={{ display: loading ? "none" : "block" }}).
+  globals.css already has @keyframes loading + .loader-progress
+  (lines 63-69), so no CSS changes are needed.
+
+----------------------------------------------------------------
+9. VERIFY (minor) — "How It Works" section responsive classes
+   File: work-with-us/page.tsx, lines 377-441 vs HTML 910-1050
+----------------------------------------------------------------
+HTML card widths use w-2/5 with max-[991px]:w-[120px]
+max-[767px]:w-[45%] max-[767px]:mt-0 max-[545px]:w-[80%]
+max-[545px]:mx-auto and mx-[15px] between the middle cards; the
+section has NO bg-color2 (it is plain bg-white, section class just
+"py-[50px]", HTML line 893). Current React section has bg-color2
+(line 364) and different breakpoint widths. Compare at each
+breakpoint and align if any card wraps differently.
+Also the HTML h2 here is text-[25px] with max-[767px]:text-[23px]
+max-[545px]:text-[21px] ... (HTML 903-907); React uses
+text-[25px] sm:text-[28px] lg:text-[32px] (line 371) — visually
+near-identical, align to HTML if you want a pixel-exact match.
+
+----------------------------------------------------------------
+10. "JOIN AS A PROVVIDER" -> OPEN PROVIDER REGISTRATION FORM
+    (new requirement; registration-process.html is the source of
+    truth). File: work-with-us/page.tsx, button lines 576-582
+---------------------------------------------------------------
+On click the "Join As A Provvider" button must open the provider
+registration form built from:
+  E:\Service-SDLC\FIx_Now_HTML\FIX_Now\registration-process.html
+(2337 lines; it is a SINGLE-PAGE form, NOT a multi-step wizard).
+
+Approach (recommended): render the form in a modal on the
+work-with-us page, reusing the existing modal pattern from
+src/app/(customerpanel)/page.tsx lines 1020-1028
+(fixed inset-0 z-50 overlay + centered white panel + &times;
+close button + inner "overflow-y-auto hide-scrollbar max-h-[75vh]").
+
+Reusable CSS to replicate verbatim from the HTML:
+  - Section card (every section uses the SAME wrapper):
+      w-full rounded-[25px] border border-[#E5E7EB] bg-white/75
+      backdrop-blur-[10px] p-[25px] sm:p-[28px] lg:p-[32px]
+      shadow-[inset_0_1px_8px_rgba(229,231,235,0.75),0_2px_8px_rgba(229,231,235,0.35)]
+  - Section heading: h3 = font-[var(--outfit-r)] text-[15px]
+      sm:text-[18px] lg:text-[24px] font-semibold leading-[1.2]
+      text-[var(--color10)]   plus   p = mt-[8px] text-[12px]
+      sm:text-[16px] leading-[1.3] text-[var(--color1)] capitalize
+  - Label: block mb-[8px] font-[var(--albert-sans-r)] text-[14px]
+      sm:text-[16px] font-semibold leading-none text-[var(--color10)]
+  - Text input: w-full h-[45px] sm:h-[48px] rounded-[4px] border
+      border-[#9CA3AF] bg-white px-[16px] text-[13px] sm:text-[16px]
+      text-[#9CA3AF] outline-none transition-all duration-200
+      focus:border-[#AEB6C0] focus:ring-0
+      focus:shadow-[0_0_0_2px_rgba(174,182,192,0.10)]
+
+Form sections in order (HTML lines 623-1547):
+  1. Personal Details (626-693): Full Legal Name, Professional Email,
+     Date Of Birth, Phone Number — grid grid-cols-1 sm:grid-cols-2
+     gap-x-[24px] gap-y-[10px].
+  2. Professional Expertise (697-799): Years Of Experience (select +
+     custom chevron svg absolute right), Primary Skill Set,
+     Certifications & Licenses (box with "Add More" button),
+     Professional Bio (textarea with "0 / 500" counter span).
+  3. Upload Documents (808-~1000): file-upload cards — read this
+     block from the HTML and copy 1:1.
+  4. Service Categories (1000-1204): 6 <button type="button"> tiles
+     (Plumbing, Electrical, Moving, Gardening, Painting, "+ 3 More")
+     in grid grid-cols-2 sm:grid-cols-3 gap-[20px] sm:gap-[24px];
+     each tile = h-[100px] sm:h-[129px] rounded-[8px] border
+     border-[#9CA3AF] bg-white flex flex-col items-center
+     justify-center hover:border-[var(--color4)] hover:bg-[#F8FBFF]
+     with a 48x48 #2772CC svg icon (large path sets — copy verbatim)
+     + label span text-[13px] sm:text-[16px] font-semibold
+     text-[#0B1C30].
+  5. Service Areas (1208-1284): Base Location input (prefilled
+     "Kestopur,Kolkata-700102,West Bengal"), Service Radius range
+     slider (min 1 / max 40 / value 20, inline oninput setting the
+     --value CSS var, [&::-webkit-slider-thumb] variants, "25 Miles"
+     label + 1.6km/40km captions), Google Maps <iframe> (Kestopur
+     embed url). Use an <iframe> the same way as the HTML.
+  6. Bank Details (1288-1355): Account Holder Name, Bank Name, IFSC
+     Code, Account Number — grid grid-cols-1 sm:grid-cols-2.
+  7. Review & Submit (1359-1517): checklist with green check svg
+     (Personal Details Complete, Professional Expertise Complete,
+     Service Categories Selected) + outline-map svg + text-[#9CA3AF]
+     (Service Areas Pending, Documents Pending, Bank Details Pending).
+  8. Action Buttons (1521-1547): Save Draft (outline — border-2
+     border-color4 bg-white text-color4, hover fills color-15) +
+     Submit Registration (type="submit", bg color4 text-white, hover
+     color-15). Both are rounded-[20px] h-[45px] sm:h-[48px]
+     px-[24px] sm:px-[36px] with the 14x10 arrow svg + hover
+     translate-x arrow.
+
+Button wiring (page.tsx lines 576-582):
+  - Change <a href="#"> to <button type="button"> (or keep <a> with
+    onClick preventDefault) and add onClick={() => setShowReg(true)}.
+  - Add const [showReg, setShowReg] = useState(false) near the other
+    state, and render {showReg && (modal)} after the CTA section
+    (or at end of the page component).
+  - Close button (absolute right/top &times;) calls setShowReg(false).
+  - Wrap the form in the modal content area and keep the modal
+    body scrollable: overflow-y-auto hide-scrollbar max-h-[75vh].
+
+Notes:
+  - registration-process.html has NO form-submit JS (no validation,
+    no success state). Its end-of-file scripts are only AOS init,
+    Swiper, script.js/modal.js, the 2s loader, search dropdown, mega
+    menu, mobile menu, user dropdown — nothing for the form. So
+    Submit Registration does nothing in the HTML; replicate that
+    (type="submit" inside a <form>, no handler) unless told otherwise.
+  - ALL fields are PRE-FILLED with demo data (Rahul Sharma,
+    rahulsharma.plumber@gmail.com, +91 98765 43210, SBI, Kestopur...).
+    Copy the values verbatim for a pixel-identical match.
+  - Convert var(--colorX) tokens using the mapping at the top of
+    this file (color4, color10, color1, color-15, etc.).
+  - Keep the "Provvider" typo in the button label.
+  - Right-side "Stand Out / Security And Privacy / Need Assistance?"
+    cards and the "Complete Your Professional Profile" h2 belong to
+    the HTML page shell — include them only if the modal is built as
+    a near-full-page layout; for a compact modal, the form sections
+    above are the required content.
+
+---------------------------------------------------------------
+11. NOT NEEDED (checked, leave as-is)
+----------------------------------------------------------------
+- AOS: not present on work-with-us.html. Do not add.
+- Swiper: loaded globally in HTML but unused in this page. Do not add.
+- Header top bar / main nav / footer: these live in the shared
+  Navbar.tsx / Footer.tsx and already match the HTML header + footer
+  structure; nothing to change for this page.
+- "See Breakdown" button, StatRow bars, Why-Choose images, Success
+  Stories positions: already faithful to the HTML.
+
+================================================================
+DONE WHEN:
+  - Frame_947.png hero renders (with the correct bg image)
+  - CTA section with "Join As A Provvider" button appears between
+    How It Works and Earning Overview
+  - ₹ counter animates 0 -> 48,320 once when scrolled into view
+  - benefit cards show the rotating color overlay on hover
+  - FAQ opens all-closed, animates with measured height, survives
+    window resize, and items touch (no gap)
+  - testimonial bubbles match per-card widths
+  - loader shows for 2s on page load (like the home page)
+  - clicking "Join As A Provvider" opens the provider registration
+    form (registration-process.html) in a modal, replicated 1:1
+    (Personal Details -> Professional Expertise -> Upload Documents
+    -> Service Categories -> Service Areas -> Bank Details ->
+    Review & Submit -> Save Draft / Submit Registration)
+Verify: npm run dev  ->  open /work-with-us  ->  compare against
+FIX_Now_HTML/FIX_Now/work-with-us.html side by side.
+================================================================

@@ -1,0 +1,138 @@
+================================================================
+changeyou.txt — Fix Now  ·  REQUIRED CHANGES TO EXISTING FILES
+================================================================
+The cart feature (route /cart) is built entirely with NEW files so no
+existing file was modified. The items below MUST be applied by the
+team to fully integrate the cart. Nothing here is optional for the
+cart to work end-to-end.
+
+----------------------------------------------------------------
+1. ADD CART LINK + COUNT BADGE IN THE NAVBAR (required for the
+   cart page to be reachable)
+   
+   File: src/layouts/user-panel/Navbar.tsx
+----------------------------------------------------------------
+Desktop cart icon (the shopping-bag SVG) is a Link with href="#":
+  - Line 423-443: change href="#" -> href="/cart"
+    (class="flex items-center justify-center w-12 h-12 border
+     border-color5 rounded-full mx-2 ...")
+  - Optionally wrap the <Link> in a <div className="relative"> and
+    render a badge with the item count from the cart store:
+      import { useCartStore } from "@/store/useCartStore";
+      const cartCount = useCartStore((s) => s.getItemCount());
+      {cartCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white
+          text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1
+          flex items-center justify-center">{cartCount}</span>
+      )}
+  - Line 402-421 is the user/profile icon (keep as-is; only the
+    cart icon below it should link to /cart).
+
+Mobile drawer cart icon:
+  - Line 516-521 is the cart <div> using FontAwesome
+    <i className="fa-solid fa-cart-shopping"></i>. Convert it to a
+    <Link href="/cart"> so mobile users reach the cart too.
+
+----------------------------------------------------------------
+2. MOUNT <QueryClientProvider> (required to enable the React Query
+   hooks in src/hooks/useCart.ts — useCartQuery, useRelatedServices,
+   etc. Not strictly required by the cart PAGE, which already works
+   via the Zustand store, but needed when server cart sync goes live)
+   File: src/app/layout.tsx (or create src/app/providers.tsx and
+   wrap children in layout.tsx)
+----------------------------------------------------------------
+  npm has @tanstack/react-query already installed; there is no
+  provider yet. Suggested:
+
+    "use client";
+    import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    export function Providers({ children }) {
+      return (
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      );
+    }
+
+  Then wrap {children} with <Providers> in src/app/layout.tsx.
+
+----------------------------------------------------------------
+3. MOUNT <Toaster /> FROM SONNER (required for the toasts that the
+   cart store fires — "Added to cart!", invalid coupon, etc. The
+   existing app already calls toast.* in LoginForm/SignupForm but
+   no <Toaster /> is mounted anywhere yet)
+   File: src/app/layout.tsx
+----------------------------------------------------------------
+    import { Toaster } from "sonner";
+    // inside the body / root layout:
+    <Toaster position="top-center" richColors />
+
+----------------------------------------------------------------
+4. CREATE THE /checkout PAGE (required for the "Place Order" button
+   to land somewhere real; right now it routes to /checkout which
+   does not exist yet -> 404)
+   Suggested file: src/app/(customerpanel)/checkout/page.tsx
+----------------------------------------------------------------
+  Read the cart from useCartStore (items, getSubtotal, getTaxes,
+  getTotal, couponCode, tipAmount), reuse CartStepper with
+  activeStep={1}, collect the customer address, and confirm the
+  order against the backend endpoint the Laravel developer provides
+  (e.g. POST /orders). After success, call clearCart().
+
+----------------------------------------------------------------
+5. LINK "WORK WITH US" BUTTONS TO /work-with-us (required for the
+   work-with-us page to be reachable from the header)
+   File: src/layouts/user-panel/Navbar.tsx
+----------------------------------------------------------------
+The page src/app/(customerpanel)/work-with-us/page.tsx now exists
+(converted from FIX_NowHtml/work-with-us.html). Two header buttons
+still point to "#" and must be changed to href="/work-with-us":
+  - Desktop  : line 144-150  ("Work With Us" outline button, class
+               "hidden lg:block text-[16px] rounded-[20px] border-2
+               border-color4 px-[36px] py-[16px] ...")
+  - Mobile   : line 627-632  ("Work With Us" in the mobile drawer,
+               class "block w-full border-2 border-color4
+               rounded-[20px] py-[16px] ...")
+Both are Next.js <Link> components, so just update the href.
+
+----------------------------------------------------------------
+6. WHEN THE BACKEND CART API GOES LIVE
+   File: src/api/api-function/cart.function.ts
+----------------------------------------------------------------
+  Uncomment the real axios calls (GET /cart, POST /cart,
+  PATCH /cart/{id}, DELETE /cart/{id}, DELETE /cart, POST /cart/coupon,
+  GET /services/suggestions) and delete the mock returns. The store
+  and UI require no further changes.
+  - Also replace the placeholder coupons in src/store/useCartStore.ts
+    (AVAILABLE_COUPONS) with the real coupon table endpoint, and
+    adjust CONVENIENCE_FEE / TAX_RATE placeholders to the real fee
+    config once provided.
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+7. FIX STICKY STACKED CARDS ON /service (required for the
+   "pages sliding one over the other" scroll effect to work)
+   File: src/app/(customerpanel)/layout.tsx
+---------------------------------------------------------------
+The service page cards use position: sticky. Any ancestor with
+overflow-x: hidden becomes a scroll container and silently kills
+position: sticky (the cards then scroll away normally instead of
+stacking). The layout wrapper div on line 8 currently has
+overflow-x-hidden:
+
+   <div className="min-h-screen flex flex-col w-full overflow-x-hidden">
+
+Change it to overflow-x-clip:
+
+   <div className="min-h-screen flex flex-col w-full overflow-x-clip">
+
+overflow-x-clip clips overflow the same way but does NOT create a
+scroll container, so position: sticky keeps working. The service
+page main element was already changed to overflow-x-clip.
+
+NOTE: body { overflow-x: hidden } in globals.css is fine — it
+propagates to the viewport, so it does not affect sticky.
+----------------------------------------------------------------

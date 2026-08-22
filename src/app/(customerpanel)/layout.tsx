@@ -5,7 +5,7 @@ import Footer from "@/layouts/user-panel/Footer";
 export default function UserLayout({
   children,}: Readonly<{children: React.ReactNode;}>) {
   return (
-    <div className="min-h-screen flex flex-col w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col w-full overflow-x-clip">
       <Navbar />
       <main className="flex-1 w-full">
         {children}

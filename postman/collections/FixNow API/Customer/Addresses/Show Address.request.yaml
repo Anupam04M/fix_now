@@ -1,0 +1,56 @@
+$kind: http-request
+description: |-
+  ## Get Customer Address by ID
+
+  This endpoint retrieves detailed information about a specific customer address identified by the `address_id`. It is useful for applications that need to display or manage user addresses.
+
+  ### Request
+
+  - **Method**: GET
+      
+  - **URL**: `{{base_url}}/customer/addresses/{{address_id}}`
+      
+
+  #### Path Parameters
+
+  - `address_id` (string): The unique identifier for the customer's address that you wish to retrieve.
+      
+
+  ### Authentication
+
+  This endpoint requires authentication. Ensure that you include a valid token in the request headers to access the resource.
+
+  ### Response
+
+  On successful retrieval, the response will contain the following structure:
+
+  - **status** (string): Indicates the success or failure of the request.
+      
+  - **data** (object): Contains the details of the address, which may include:
+      
+      - `street` (string): The street address.
+          
+      - `city` (string): The city of the address.
+          
+      - `state` (string): The state of the address.
+          
+      - `postal_code` (string): The postal code.
+          
+      - `country` (string): The country of the address.
+          
+
+  ### Possible Error Responses
+
+  - **404 Not Found**: The specified `address_id` does not exist.
+      
+  - **401 Unauthorized**: Authentication failed or token is missing.
+      
+  - **500 Internal Server Error**: An unexpected error occurred on the server.
+      
+
+  Make sure to handle these responses appropriately in your application.
+url: "{{base_url}}/customer/addresses/{{address_id}}"
+method: GET
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 3000

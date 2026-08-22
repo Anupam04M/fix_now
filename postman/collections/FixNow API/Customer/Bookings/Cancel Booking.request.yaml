@@ -1,0 +1,120 @@
+$kind: http-request
+description: |-
+  ## Cancel Booking
+
+  This endpoint allows the user to cancel a specific booking identified by the `booking_id`. The request requires a PATCH method to update the booking status to cancelled, along with optional remarks regarding the cancellation.
+
+  ### Request
+
+  - **URL:** `{{base_url}}/customer/bookings/{{booking_id}}/cancel`
+      
+  - **Method:** PATCH
+      
+  - **Content-Type:** application/json
+      
+
+  #### Request Body
+
+  The request body must be in JSON format and should include the following parameter:
+
+  - **remarks** (string): Optional remarks provided by the customer regarding the cancellation.
+      
+
+  Example:
+
+  ``` json
+  {
+    "remarks": "Customer requested cancellation due to unforeseen circumstances."
+  }
+
+   ```
+
+  ### Response
+
+  Upon a successful cancellation, the response will return a status code of `200` and a JSON object with the following structure:
+
+  - **success** (boolean): Indicates whether the cancellation was successful.
+      
+  - **message** (string): A message providing additional information about the cancellation (may be empty).
+      
+  - **data** (object): Contains details about the booking that was cancelled:
+      
+      - **id** (integer): The unique identifier for the booking.
+          
+      - **booking_number** (string): The booking reference number.
+          
+      - **booking_date** (string): The date of the booking.
+          
+      - **booking_time** (string): The time of the booking.
+          
+      - **status** (string): The current status of the booking (should reflect cancellation).
+          
+      - **address** (object): Contains the address details related to the booking:
+          
+          - **id** (integer): The unique identifier for the address.
+              
+          - **label** (string): The label for the address.
+              
+          - **city** (string): The city of the address.
+              
+          - **state** (string): The state of the address.
+              
+      - **services_count** (integer): The number of services associated with the booking.
+          
+      - **summary** (object): Contains financial details related to the booking:
+          
+          - **subtotal** (string): The subtotal amount for the booking.
+              
+          - **service_charge** (string): The service charge applied.
+              
+          - **tax** (string): The tax amount.
+              
+          - **discount** (string): Any discount applied.
+              
+          - **total** (string): The total amount after applying charges and discounts.
+              
+
+  Example Response:
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "id": 0,
+      "booking_number": "",
+      "booking_date": "",
+      "booking_time": "",
+      "status": "",
+      "address": {
+        "id": 0,
+        "label": "",
+        "city": "",
+        "state": ""
+      },
+      "services_count": 0,
+      "summary": {
+        "subtotal": "",
+        "service_charge": "",
+        "tax": "",
+        "discount": "",
+        "total": ""
+      }
+    }
+  }
+
+   ```
+
+  This endpoint is crucial for managing customer bookings and ensuring that cancellations are processed efficiently.
+url: "{{base_url}}/customer/bookings/{{booking_id}}/cancel"
+method: PATCH
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "remarks": "Customer requested cancellation"
+    }
+order: 4000

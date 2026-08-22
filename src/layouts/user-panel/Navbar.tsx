@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -53,7 +53,24 @@ export default function Navbar() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
+  // User profile dropdown state
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
   const { isAuthenticate, logout } = useAuthStore();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const openLogin = () => {
     setIsSignupOpen(false);
@@ -142,7 +159,7 @@ export default function Navbar() {
               </p>
 
               <Link
-                href="#"
+                href="/work-with-us"
                 className="hidden lg:block text-[16px] rounded-[20px] border-2 border-color4 px-[36px] py-[16px]
                  whitespace-nowrap text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-500 ease-in-out"
               >
@@ -399,29 +416,68 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  <Link
-                    href="#"
-                    className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text- hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300"
-                  >
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 28 28"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="relative mx-2" ref={userMenuRef}>
+                    <button
+                      onClick={() => {
+                        if (isAuthenticate) {
+                          setIsUserMenuOpen(!isUserMenuOpen);
+                        } else {
+                          setIsLoginOpen(true);
+                        }
+                      }}
+                      className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300"
+                      aria-label="Profile menu"
                     >
-                      <path
-                        d="M21 22.167C21 19.5897 17.866 17.5003 14 17.5003C10.134 17.5003 7 19.5897 7 22.167M14 14.0003C11.4227 14.0003 9.33333 11.911 9.33333 9.33366C9.33333 6.75633 11.4227 4.66699 14 4.66699C16.5773 4.66699 18.6667 6.75633 18.6667 9.33366C18.6667 11.911 16.5773 14.0003 14 14.0003Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M21 22.167C21 19.5897 17.866 17.5003 14 17.5003C10.134 17.5003 7 19.5897 7 22.167M14 14.0003C11.4227 14.0003 9.33333 11.911 9.33333 9.33366C9.33333 6.75633 11.4227 4.66699 14 4.66699C16.5773 4.66699 18.6667 6.75633 18.6667 9.33366C18.6667 11.911 16.5773 14.0003 14 14.0003Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+
+                    {isAuthenticate && isUserMenuOpen && (
+                      <div className="absolute right-0 top-[60px] z-50 w-72 bg-white rounded-3xl p-6 shadow-sm border border-gray-100/80">
+                        <nav className="flex flex-col space-y-6">
+                          <Link
+                            href="/profile-details"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="text-[#1E427B] font-semibold text-lg hover:opacity-80 transition-opacity"
+                          >
+                            Personal Details
+                          </Link>
+                          <Link
+                            href="/booking-history"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="text-[#1E427B] font-semibold text-lg hover:opacity-80 transition-opacity"
+                          >
+                            Booking History
+                          </Link>
+                          <button
+                            onClick={async () => {
+                              await logout();
+                              setIsUserMenuOpen(false);
+                            }}
+                            className="text-left text-[#1E427B] font-semibold text-lg hover:opacity-80 transition-opacity cursor-pointer"
+                          >
+                            Logout
+                          </button>
+                        </nav>
+                      </div>
+                    )}
+                  </div>
 
                   <Link
-                    href="#"
+                    href="/cart"
                     className="flex items-center justify-center w-12 h-12 border border-color5 rounded-full mx-2 text-color5 hover:bg-color-15 hover:border-color-15 hover:text-white transition-all duration-300"
                   >
                     <svg

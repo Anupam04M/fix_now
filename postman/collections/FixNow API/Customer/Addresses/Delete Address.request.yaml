@@ -1,0 +1,42 @@
+$kind: http-request
+description: |-
+  ## DELETE Customer Address
+
+  This endpoint allows the user to delete a specific address associated with a customer account. The address is identified by the `address_id` parameter in the URL.
+
+  ### Request Parameters
+
+  - **URL**: `{{base_url}}/customer/addresses/{{address_id}}`
+      
+      - `address_id` (path parameter): The unique identifier of the address that you wish to delete. This parameter is required.
+          
+
+  ### Response Structure
+
+  Upon successful deletion, the API will return a response indicating the status of the operation. The expected response will typically include:
+
+  - **status**: A message indicating the result of the deletion operation (e.g., success or failure).
+      
+  - **code**: An HTTP status code reflecting the outcome of the request (e.g., 204 for successful deletion).
+      
+
+  ### Example Response
+
+  ``` json
+  {
+    "status": "success",
+    "code": 204
+  }
+
+   ```
+
+  ### Notes
+
+  - Ensure that the `address_id` provided corresponds to an existing address in the customer account to avoid errors.
+      
+  - Deleting an address is irreversible; once deleted, the address cannot be recovered.
+url: "{{base_url}}/customer/addresses/{{address_id}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 6000

@@ -1,0 +1,115 @@
+$kind: http-request
+description: |-
+  ## Login Endpoint
+
+  This endpoint is used to authenticate a user and obtain an access token for subsequent requests. It requires the user's email and password, along with an optional device name to identify the device being used for login.
+
+  ### Request
+
+  **Method:** POST  
+  **URL:** `{{base_url}}/auth/login`
+
+  #### Request Body
+
+  The request body must be in JSON format and contain the following parameters:
+
+  - **email** (string, required): The email address of the user attempting to log in.
+      
+  - **password** (string, required): The password associated with the user's account.
+      
+  - **device_name** (string, optional): A name for the device from which the user is logging in.
+      
+
+  **Example Request Body:**
+
+  ``` json
+  {
+    "email": "user@example.com",
+    "password": "yourpassword",
+    "device_name": "example-device"
+  }
+
+   ```
+
+  ### Response
+
+  Upon successful authentication, the server responds with a JSON object containing the following fields:
+
+  - **success** (boolean): Indicates whether the login attempt was successful.
+      
+  - **message** (string): A message related to the login attempt (may be empty).
+      
+  - **data** (object): Contains user information and the authentication token.
+      
+      - **user** (object): Information about the authenticated user.
+          
+          - **id** (integer): The unique identifier for the user.
+              
+          - **name** (string): The name of the user.
+              
+          - **email** (string): The email address of the user.
+              
+          - **phone** (string or null): The phone number of the user (if available).
+              
+          - **role** (string): The role assigned to the user (e.g., admin, user).
+              
+          - **status** (string): The current status of the user account (e.g., active, inactive).
+              
+          - **avatar** (string or null): The URL of the user's avatar image (if available).
+              
+      - **token** (string): The authentication token that must be included in subsequent requests to access protected resources.
+          
+
+  **Example Response:**
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "user": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "user@example.com",
+        "phone": null,
+        "role": "user",
+        "status": "active",
+        "avatar": null
+      },
+      "token": "your-authentication-token"
+    }
+  }
+
+   ```
+
+  ### Important Notes
+
+  - Ensure that the email and password are correct to avoid authentication failures.
+      
+  - The returned token must be stored securely and included in the Authorization header for any subsequent requests that require authentication.
+      
+  - If the login attempt fails, the response will still return a JSON object, but the `success` field will be `false`, and the `message` field may contain details about the failure.
+      
+
+  ### Usage Example
+
+  To log in, send a POST request to `{{base_url}}/auth/login` with the required JSON body. Upon successful login, use the returned token for accessing protected endpoints.
+url: "{{base_url}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "fixnowadmin@gmail.com",
+      "password": "12345678",
+      "device_name": "postman-admin"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.token) pm.collectionVariables.set('customer_token', json.data.token);
+    language: text/javascript
+order: 4000

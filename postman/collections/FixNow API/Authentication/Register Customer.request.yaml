@@ -1,0 +1,110 @@
+$kind: http-request
+description: |-
+  ## Register Customer
+
+  This endpoint allows a new customer to register by providing their details. Upon successful registration, a token is generated for the user, which can be used for subsequent authenticated requests.
+
+  ### Request
+
+  **Method:** POST  
+  **Endpoint:** `{{base_url}}/auth/register/customer`
+
+  #### Request Body
+
+  The request body must be in JSON format and include the following parameters:
+
+  - `name` (string): The full name of the customer.
+      
+  - `email` (string): The email address of the customer, which must be unique.
+      
+  - `password` (string): The password chosen by the customer, which must meet security requirements.
+      
+  - `password_confirmation` (string): A confirmation of the password to ensure it matches the original.
+      
+  - `device_name` (string): A name for the device being used for registration (e.g., "postman-customer").
+      
+
+  **Example Payload:**
+
+  ``` json
+  {
+    "name": "John Doe",
+    "email": "customer@example.com",
+    "password": "Password123!",
+    "password_confirmation": "Password123!",
+    "device_name": "postman-customer"
+  }
+
+   ```
+
+  ### Response
+
+  The response will return a status code of `201` on successful registration, along with a JSON object containing the following structure:
+
+  - `success` (boolean): Indicates whether the registration was successful.
+      
+  - `message` (string): A message providing additional information (may be empty).
+      
+  - `data` (object): Contains the user's information and authentication token.
+      
+      - `user` (object): Details of the newly registered user.
+          
+          - `id` (integer): The unique identifier for the user.
+              
+          - `name` (string): The name of the user.
+              
+          - `email` (string): The email address of the user.
+              
+          - `phone` (nullable string): The phone number of the user, if provided.
+              
+          - `role` (string): The role assigned to the user.
+              
+          - `status` (string): The current status of the user account.
+              
+          - `avatar` (nullable string): The URL of the user's avatar, if available.
+              
+      - `token` (string): A unique token for the user to authenticate future requests.
+          
+
+  **Example Response:**
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "user": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "customer@example.com",
+        "phone": null,
+        "role": "customer",
+        "status": "active",
+        "avatar": null
+      },
+      "token": "your_generated_token_here"
+    }
+  }
+
+   ```
+url: "{{base_url}}/auth/register/customer"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "Priya Verma",
+      "email": "customer+qa@example.com",
+      "password": "Password123!",
+      "password_confirmation": "Password123!",
+      "device_name": "postman-customer"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.token) pm.collectionVariables.set('customer_token', json.data.token);
+    language: text/javascript
+order: 2000
