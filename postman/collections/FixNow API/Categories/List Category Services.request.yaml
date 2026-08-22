@@ -1,0 +1,71 @@
+$kind: http-request
+description: |-
+  ### Endpoint Description
+
+  This endpoint retrieves a list of services associated with a specific category. It allows users to query services based on the provided category ID.
+
+  ### Request Parameters
+
+  - **URL**: `{{base_url}}/categories/{{category_id}}/services`
+      
+  - **Method**: GET
+      
+
+  #### Path Parameters
+
+  - `category_id` (required): The unique identifier of the category for which services are being requested.
+      
+
+  ### Headers
+
+  - **Authorization**: A valid token must be provided in the request headers to authenticate the user. Ensure that the token is included in the format: `Bearer {token}`.
+      
+
+  ### Response Structure
+
+  Upon a successful request, the response will contain a list of services related to the specified category. The structure of the response is as follows:
+
+  - **status**: Indicates the success or failure of the request.
+      
+  - **data**: An array of service objects, where each object contains:
+      
+      - `service_id`: The unique identifier for the service.
+          
+      - `name`: The name of the service.
+          
+      - `description`: A brief description of what the service entails.
+          
+      - `price`: The cost associated with the service.
+          
+      - `availability`: Indicates whether the service is currently available.
+          
+
+  ### Example Response
+
+  ``` json
+  {
+    "status": "success",
+    "data": [
+      {
+        "service_id": "123",
+        "name": "Service A",
+        "description": "Description of Service A",
+        "price": "100",
+        "availability": true
+      },
+      {
+        "service_id": "124",
+        "name": "Service B",
+        "description": "Description of Service B",
+        "price": "150",
+        "availability": false
+      }
+    ]
+  }
+
+   ```
+
+  Ensure that the request is properly authenticated and that the `category_id` is valid to receive the expected response.
+url: "{{base_url}}/categories/{{category_id}}/services"
+method: GET
+order: 2000

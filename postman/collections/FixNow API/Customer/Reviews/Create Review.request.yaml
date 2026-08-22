@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{base_url}}/customer/bookings/{{booking_id}}/review"
+method: POST
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "rating": 5,
+      "comment": "Excellent service."
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.review?.id) pm.collectionVariables.set('review_id', json.data.review.id);
+    language: text/javascript
+order: 1000

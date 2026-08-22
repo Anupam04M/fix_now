@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{base_url}}/provider/assignments/{{assignment_id}}/reject"
+method: PATCH
+headers:
+  Authorization: Bearer {{provider_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "rejection_reason": "Not available"
+    }
+order: 4000

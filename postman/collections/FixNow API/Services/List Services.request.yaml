@@ -1,0 +1,54 @@
+$kind: http-request
+description: |-
+  ## API Endpoint: Get Services
+
+  ### Purpose
+
+  This endpoint retrieves a list of services available in the system. It is primarily used to fetch the current offerings for users or applications that require service information.
+
+  ### Request Format
+
+  - **Method**: GET
+      
+  - **URL**: `{{base_url}}/services`
+      
+  - **Request Body**: This endpoint does not require a request body.
+      
+
+  ### Response Format
+
+  The response will be in JSON format and will typically include an array of service objects. Each service object may contain the following fields:
+
+  - `id`: Unique identifier for the service.
+      
+  - `name`: The name of the service.
+      
+  - `description`: A brief description of what the service offers.
+      
+  - `status`: Current status of the service (e.g., active, inactive).
+      
+
+  ### Example Response
+
+  ``` json
+  [
+      {
+          "id": "1",
+          "name": "Service A",
+          "description": "Description of Service A",
+          "status": "active"
+      },
+      {
+          "id": "2",
+          "name": "Service B",
+          "description": "Description of Service B",
+          "status": "inactive"
+      }
+  ]
+
+   ```
+
+  This endpoint is essential for clients needing to understand the services provided by the application and their current availability.
+url: "{{base_url}}/services"
+method: GET
+order: 1000

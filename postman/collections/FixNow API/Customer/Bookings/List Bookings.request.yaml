@@ -1,0 +1,133 @@
+$kind: http-request
+description: |-
+  # Get Customer Bookings
+
+  This endpoint retrieves a list of bookings associated with a customer. It provides detailed information about each booking, including its status, date, time, and associated services.
+
+  ## Request
+
+  ### Method
+
+  `GET`
+
+  ### URL
+
+  `{{base_url}}/customer/bookings`
+
+  ### Authentication
+
+  This endpoint requires authentication. Ensure that you include a valid access token in the request headers.
+
+  ## Response
+
+  ### Status Codes
+
+  - **200 OK**: The request was successful, and the bookings data is returned.
+      
+  - **401 Unauthorized**: Authentication failed. Ensure that you provide a valid token.
+      
+  - **403 Forbidden**: You do not have permission to access this resource.
+      
+  - **404 Not Found**: The requested resource could not be found.
+      
+
+  ### Response Structure
+
+  The response will be in JSON format and contains the following structure:
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": [
+      {
+        "id": 0,
+        "booking_number": "",
+        "booking_date": "",
+        "booking_time": "",
+        "status": "",
+        "address": {
+          "id": 0,
+          "label": "",
+          "city": "",
+          "state": ""
+        },
+        "services_count": 0,
+        "summary": {
+          "subtotal": "",
+          "service_charge": "",
+          "tax": "",
+          "discount": "",
+          "total": ""
+        }
+      }
+    ],
+    "pagination": {
+      "current_page": 0,
+      "per_page": 0,
+      "total": 0,
+      "last_page": 0
+    }
+  }
+
+   ```
+
+  ### Response Fields
+
+  - **success**: Indicates whether the request was successful.
+      
+  - **message**: A message providing additional context about the request.
+      
+  - **data**: An array of booking objects, each containing:
+      
+      - **id**: Unique identifier for the booking.
+          
+      - **booking_number**: The booking reference number.
+          
+      - **booking_date**: The date of the booking.
+          
+      - **booking_time**: The time of the booking.
+          
+      - **status**: Current status of the booking.
+          
+      - **address**: An object containing the address details:
+          
+          - **id**: Unique identifier for the address.
+              
+          - **label**: Label for the address.
+              
+          - **city**: City of the address.
+              
+          - **state**: State of the address.
+              
+      - **services_count**: Number of services associated with the booking.
+          
+      - **summary**: An object summarizing the financial details of the booking:
+          
+          - **subtotal**: Subtotal amount.
+              
+          - **service_charge**: Additional service charges.
+              
+          - **tax**: Tax amount.
+              
+          - **discount**: Any discounts applied.
+              
+          - **total**: Total amount after applying charges and discounts.
+              
+  - **pagination**: An object providing pagination details:
+      
+      - **current_page**: The current page of results.
+          
+      - **per_page**: Number of results per page.
+          
+      - **total**: Total number of bookings.
+          
+      - **last_page**: The last page number of results.
+          
+
+  This endpoint is useful for customers to view their booking history and related details.
+url: "{{base_url}}/customer/bookings"
+method: GET
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 1000

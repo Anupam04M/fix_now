@@ -1,0 +1,42 @@
+$kind: http-request
+description: |-
+  ## Get Customer Addresses
+
+  This endpoint retrieves a list of addresses associated with a specific customer. It is useful for applications that need to display or manage customer address information.
+
+  ### Request
+
+  - **Method**: GET
+      
+  - **Endpoint**: `{{base_url}}/customer/addresses`
+      
+
+  ### Expected Input Parameters
+
+  This endpoint does not require any input parameters in the request.
+
+  ### Response Structure
+
+  The response will contain a JSON object with the following structure:
+
+  - **addresses**: An array of address objects, each containing:
+      
+      - **id**: Unique identifier for the address.
+          
+      - **street**: The street name and number.
+          
+      - **city**: The city of the address.
+          
+      - **state**: The state of the address.
+          
+      - **postal_code**: The postal code for the address.
+          
+      - **country**: The country of the address.
+          
+
+  The response will provide a comprehensive list of all addresses linked to the customer, enabling further actions such as editing or deleting addresses as needed.
+url: "{{base_url}}/customer/addresses"
+method: GET
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 1000

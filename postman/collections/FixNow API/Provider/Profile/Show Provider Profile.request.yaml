@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/provider/profile"
+method: GET
+headers:
+  Authorization: Bearer {{provider_token}}
+order: 1000

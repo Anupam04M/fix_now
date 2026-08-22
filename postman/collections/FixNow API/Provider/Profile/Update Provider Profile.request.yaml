@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/provider/profile"
+method: PATCH
+headers:
+  Authorization: Bearer {{provider_token}}
+body:
+  type: formdata
+  content:
+    - type: text
+      key: about
+      value: Updated provider profile
+order: 3000

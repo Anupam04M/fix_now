@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/customer/bookings/{{booking_id}}/payment/verify"
+method: POST
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"razorpay_payment_id\": \"pay_TS8ChV3bLqoxog\",\r
+
+    \    \"razorpay_order_id\": \"order_TS7rMqzUn7ym8L\",\r
+
+    \    \"razorpay_signature\": \"020019d757065718e84b5c5deeab594a01c894fe8a29df5201b38a570257c35e\"\r
+
+    }"
+order: 3000

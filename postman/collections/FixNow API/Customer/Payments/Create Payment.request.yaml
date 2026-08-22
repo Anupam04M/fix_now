@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/customer/bookings/{{booking_id}}/payment"
+method: POST
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "payment_method": "cash_on_delivery"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.payment?.id) pm.collectionVariables.set('payment_id', json.data.payment.id);
+    language: text/javascript
+order: 1000

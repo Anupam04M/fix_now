@@ -1,0 +1,137 @@
+$kind: http-request
+description: |-
+  ## Create Booking
+
+  This endpoint allows you to create a new booking for a customer. It requires the `customer_address_id` to associate the booking with a specific address.
+
+  ### Request
+
+  **Method:** POST  
+  **Endpoint:** `{{base_url}}/customer/bookings`
+
+  **Request Body:**
+
+  - `customer_address_id` (object): The ID of the customer's address. This is required to create a booking.
+      
+
+  ### Response
+
+  Upon a successful request, the API will return a `201 Created` status with the following structure:
+
+  - **success** (boolean): Indicates whether the booking was created successfully.
+      
+  - **message** (string): A message providing additional information about the request (can be empty).
+      
+  - **data** (object): Contains the details of the created booking.
+      
+      - **booking** (object): Information about the booking.
+          
+          - **id** (integer): The unique identifier for the booking.
+              
+          - **booking_number** (string): The booking number assigned to this booking.
+              
+          - **booking_date** (string): The date of the booking.
+              
+          - **booking_time** (string): The time of the booking.
+              
+          - **special_instructions** (string): Any special instructions related to the booking.
+              
+      - **address** (object): Details of the address associated with the booking.
+          
+          - **id** (integer): The unique identifier for the address.
+              
+          - **label** (string): A label for the address.
+              
+          - **contact_person** (string): The name of the contact person at the address.
+              
+          - **contact_phone** (string): The phone number of the contact person.
+              
+          - **address** (object): The full address details.
+              
+              - **line_1** (string): First line of the address.
+                  
+              - **line_2** (string): Second line of the address.
+                  
+              - **landmark** (string): A landmark near the address.
+                  
+              - **city** (string): The city of the address.
+                  
+              - **state** (string): The state of the address.
+                  
+              - **postal_code** (string): The postal code of the address.
+                  
+              - **latitude** (string): Latitude of the address location.
+                  
+              - **longitude** (string): Longitude of the address location.
+                  
+          - **is_default** (boolean): Indicates if this is the default address for the customer.
+              
+      - **services** (array): A list of services associated with the booking.
+          
+          - Each service object contains:
+              
+              - **name** (string): The name of the service.
+                  
+              - **quantity** (integer): The quantity of the service.
+                  
+              - **unit_price** (string): The price per unit of the service.
+                  
+              - **subtotal** (string): The subtotal for the service.
+                  
+      - **summary** (object): A summary of the booking costs.
+          
+          - **subtotal** (string): Total before any additional charges.
+              
+          - **service_charge** (string): Total service charge applied.
+              
+          - **tax** (string): Total tax applied.
+              
+          - **discount** (string): Any discounts applied.
+              
+          - **total** (string): Final total cost of the booking.
+              
+      - **status** (object): Current status of the booking.
+          
+          - **current** (string): The current status of the booking.
+              
+          - **history** (array): A history of status changes.
+              
+              - Each status history object contains:
+                  
+                  - **status** (string): The status at a given time.
+                      
+                  - **remarks** (string): Any remarks related to the status change.
+                      
+      - **payment** (null): Payment details (if applicable).
+          
+
+  Ensure that you provide a valid `customer_address_id` to successfully create a booking.
+url: "{{base_url}}/customer/bookings"
+method: POST
+headers:
+  Authorization: Bearer {{customer_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "customer_address_id": {{address_id}},
+      "booking_date": "2026-07-25",
+      "booking_time": "10:30",
+      "service_charge": 50,
+      "tax": 25,
+      "discount": 0,
+      "services": [
+        {
+          "service_id": {{service_id}},
+          "quantity": 1
+        }
+      ]
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.booking?.id) pm.collectionVariables.set('booking_id', json.data.booking.id);
+    language: text/javascript
+order: 2000

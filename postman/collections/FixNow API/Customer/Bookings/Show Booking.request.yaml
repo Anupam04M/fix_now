@@ -1,0 +1,171 @@
+$kind: http-request
+description: |-
+  ## Get Customer Booking Details
+
+  This endpoint retrieves the details of a specific booking for a customer based on the provided booking ID. It returns comprehensive information about the booking, including associated services, address details, and payment status.
+
+  ### Request
+
+  - **Method**: GET
+      
+  - **Endpoint**: `{{base_url}}/customer/bookings/{{booking_id}}`
+      
+  - **Path Parameter**:
+      
+      - `booking_id` (required): The unique identifier for the booking you wish to retrieve.
+          
+
+  ### Response
+
+  The response will be in JSON format and will contain the following structure:
+
+  - **success**: (boolean) Indicates whether the request was successful.
+      
+  - **message**: (string) A message providing additional information about the request.
+      
+  - **data**: (object) Contains the details of the booking:
+      
+      - **booking**: (object) Information about the booking:
+          
+          - `id`: (integer) The unique identifier of the booking.
+              
+          - `booking_number`: (string) The reference number for the booking.
+              
+          - `booking_date`: (string) The date when the booking was made.
+              
+          - `booking_time`: (string) The time of the booking.
+              
+          - `special_instructions`: (string) Any special instructions related to the booking.
+              
+      - **address**: (object) Details of the address associated with the booking:
+          
+          - `id`: (integer) The unique identifier for the address.
+              
+          - `label`: (string) A label for the address.
+              
+          - `contact_person`: (string) The name of the contact person.
+              
+          - `contact_phone`: (string) The phone number of the contact person.
+              
+          - `address`: (object) The physical address:
+              
+              - `line_1`: (string) The first line of the address.
+                  
+              - `line_2`: (string) The second line of the address (optional).
+                  
+              - `landmark`: (string) A nearby landmark (optional).
+                  
+              - `city`: (string) The city of the address.
+                  
+              - `state`: (string) The state of the address.
+                  
+              - `postal_code`: (string) The postal code.
+                  
+              - `latitude`: (string) Latitude coordinate of the address.
+                  
+              - `longitude`: (string) Longitude coordinate of the address.
+                  
+          - `is_default`: (boolean) Indicates if this is the default address.
+              
+      - **services**: (array) A list of services associated with the booking:
+          
+          - Each service (object) includes:
+              
+              - `name`: (string) The name of the service.
+                  
+              - `quantity`: (integer) The quantity of the service.
+                  
+              - `unit_price`: (string) The price per unit of the service.
+                  
+              - `subtotal`: (string) The subtotal for the service.
+                  
+      - **summary**: (object) A summary of the financial details:
+          
+          - `subtotal`: (string) The subtotal amount.
+              
+          - `service_charge`: (string) The service charge applied.
+              
+          - `tax`: (string) The tax amount.
+              
+          - `discount`: (string) Any discounts applied.
+              
+          - `total`: (string) The total amount due.
+              
+      - **status**: (object) The current status of the booking:
+          
+          - `current`: (string) The current status of the booking.
+              
+          - `history`: (array) A history of status changes, each containing:
+              
+              - `status`: (string) The status at a point in time.
+                  
+              - `remarks`: (string) Any remarks associated with the status change.
+                  
+      - **payment**: (object or null) Information about the payment status (if applicable).
+          
+
+  ### Example Response
+
+  ``` json
+  {
+    "success": true,
+    "message": "",
+    "data": {
+      "booking": {
+        "id": 0,
+        "booking_number": "",
+        "booking_date": "",
+        "booking_time": "",
+        "special_instructions": ""
+      },
+      "address": {
+        "id": 0,
+        "label": "",
+        "contact_person": "",
+        "contact_phone": "",
+        "address": {
+          "line_1": "",
+          "line_2": "",
+          "landmark": "",
+          "city": "",
+          "state": "",
+          "postal_code": "",
+          "latitude": "",
+          "longitude": ""
+        },
+        "is_default": true
+      },
+      "services": [
+        {
+          "name": "",
+          "quantity": 0,
+          "unit_price": "",
+          "subtotal": ""
+        }
+      ],
+      "summary": {
+        "subtotal": "",
+        "service_charge": "",
+        "tax": "",
+        "discount": "",
+        "total": ""
+      },
+      "status": {
+        "current": "",
+        "history": [
+          {
+            "status": "",
+            "remarks": ""
+          }
+        ]
+      },
+      "payment": null
+    }
+  }
+
+   ```
+url: "{{base_url}}/customer/bookings/{{booking_id}}"
+method: GET
+headers:
+  Authorization: Bearer {{customer_token}}
+order: 3000

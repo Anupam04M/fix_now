@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/customer/profile"
+method: POST
+headers:
+  - key: Authorization
+    value: Bearer {{customer_token}}
+  - key: Accept
+    value: application/json
+  - key: ""
+    value: ""
+    disabled: true
+body:
+  type: formdata
+  content:
+    - type: text
+      key: _method
+      value: PATCH
+    - type: text
+      key: gender
+      value: male
+order: 2000

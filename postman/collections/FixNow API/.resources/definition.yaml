@@ -1,0 +1,16 @@
+$kind: collection
+name: FixNow API
+description: Production-ready Postman Collection for the FixNow backend.
+variables:
+  base_url: http://127.0.0.1:8000/api
+  customer_token: ""
+  provider_token: ""
+  admin_token: ""
+  category_id: "1"
+  service_id: "1"
+  address_id: "1"
+  booking_id: ""
+  payment_id: ""
+  provider_profile_id: ""
+  assignment_id: ""
+  review_id: ""

@@ -1,0 +1,27 @@
+name: FixNow Local
+values:
+  - key: base_url
+    value: 'http://127.0.0.1:8000/api'
+  - key: customer_token
+    value: ''
+  - key: provider_token
+    value: ''
+  - key: admin_token
+    value: ''
+  - key: category_id
+    value: '1'
+  - key: service_id
+    value: '1'
+  - key: address_id
+    value: '1'
+  - key: booking_id
+    value: ''
+  - key: payment_id
+    value: ''
+  - key: provider_profile_id
+    value: ''
+  - key: assignment_id
+    value: ''
+  - key: review_id
+    value: ''
+color: 0
