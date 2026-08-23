@@ -15,6 +15,7 @@ import React, {
   useRef,
   useLayoutEffect,
 } from "react";
+import { useRouter } from "next/navigation";
 import { ctaArrowSvg, joinArrowSvg } from "./cta-assets";
 import RegistrationModal from "./registration-modal";
 
@@ -165,6 +166,9 @@ const StatRow = ({
 );
 
 export default function WorkWithUs() {
+  // Router for navigating to the full registration process page
+  const router = useRouter();
+
   // ------------------------------------------------------------------
   // FAQ accordion state (all items closed by default, one at a time)
   // ------------------------------------------------------------------
@@ -581,7 +585,7 @@ export default function WorkWithUs() {
             <div className="col-span-4 min-h-[320px] flex justify-center items-center">
               <button
                 type="button"
-                onClick={() => setShowRegistration(true)}
+                onClick={() => router.push("/work-with-us/registration")}
                 className="inline-block py-[16px] px-[36px] bg-color4 rounded-[20px] text-white flex gap-1.5"
               >
                 Join As A Provvider

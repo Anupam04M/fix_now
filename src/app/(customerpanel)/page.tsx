@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ArrowUpRight } from "lucide-react";
+import AcServiceModal from "@/components/home/AcServiceModal";
 import { Autoplay, Navigation, FreeMode } from "swiper/modules";
 
 // Image Imports
@@ -274,7 +275,11 @@ const electricalServices = [
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  // STEP 1 modal: appliance/electrical service grid
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  // STEP 2 modal: service detail (opens when a tile in STEP 1 is clicked)
+  const [isAcModalOpen, setIsAcModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState("AC");
 
   // Pure Tailwind Button Class (Replaces custom .cmn-btn CSS)
   const cmnBtnClasses =
@@ -523,7 +528,8 @@ export default function Home() {
                             </div>
                           </div>
 
-                          {/* Exact Arrow from HTML inside card footer */}
+                          {/* Exact Arrow from HTML inside card footer —
+                              opens STEP 1: the appliance/electrical grid */}
                           <button
                             onClick={() => setIsServiceModalOpen(true)}
                             className="w-[42px] h-[42px] sm:w-[46px] sm:h-[46px] lg:w-[50px] lg:h-[50px] shrink-0 rounded-full border border-color4 flex items-center justify-center bg-white text-color4 transition-all duration-300 group-hover:bg-color4 group-hover:text-white shadow-[0_8px_25px_rgba(0,0,0,0.2)]"
@@ -1026,7 +1032,7 @@ export default function Home() {
             >
               &times;
             </button>
-            <div className="overflow-y-auto hide-scrollbar max-h-[75vh]">
+              <div className="overflow-y-auto hide-scrollbar max-h-[75vh]">
               <p className="text-black font-semibold text-[32px] font-outfit">
                 Appliance Repair Our Service
               </p>
@@ -1035,6 +1041,13 @@ export default function Home() {
                 {applianceServices.map((item, i) => (
                   <div
                     key={i}
+                    onClick={() => {
+                      // Clicking any tile -> close this grid and open the
+                      // service detail modal for that service (HTML flow)
+                      setSelectedService(item.title);
+                      setIsServiceModalOpen(false);
+                      setIsAcModalOpen(true);
+                    }}
                     className="col-span-2 min-h-[180px] rounded-[15px] shadow-[5px_0_10.1px_0_#F3F4F6] p-[10px] relative flex flex-col justify-center items-center hover:bg-gray-50 cursor-pointer transition-colors border border-gray-100"
                   >
                     <figure>
@@ -1070,6 +1083,11 @@ export default function Home() {
                 {electricalServices.map((item, i) => (
                   <div
                     key={i}
+                    onClick={() => {
+                      setSelectedService(item.title);
+                      setIsServiceModalOpen(false);
+                      setIsAcModalOpen(true);
+                    }}
                     className="col-span-2 min-h-[180px] rounded-[15px] shadow-[5px_0_10.1px_0_#F3F4F6] p-[10px] relative flex flex-col justify-center items-center hover:bg-gray-50 cursor-pointer transition-colors border border-gray-100"
                   >
                     <figure>
@@ -1100,6 +1118,16 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* ================= MODAL: SERVICE DETAIL (STEP 2) ================= */}
+      {/* Opens when a tile inside the grid modal above is clicked.
+          Passes the clicked service name so the detail view shows
+          e.g. "Refrigerator" or "AC" dynamically. */}
+      <AcServiceModal
+        isOpen={isAcModalOpen}
+        onClose={() => setIsAcModalOpen(false)}
+        serviceName={selectedService}
+      />
     </>
   );
 }

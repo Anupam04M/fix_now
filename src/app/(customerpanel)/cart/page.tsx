@@ -4,9 +4,25 @@
 // ================================================================
 // CART PAGE  (route: /cart)
 // ----------------------------------------------------------------
-// Fully dynamic: cart data lives in the persisted Zustand store and
-// will sync with the backend cart API once it is available
-// (see src/api/api-function/cart.function.ts).
+// Pixel-matched to FIX_Now_HTML/FIX_Now/cart.html.
+//
+// DATA FLOW TODAY (already dynamic, no backend needed):
+//   useCartStore (Zustand + localStorage persist) holds the items.
+//   Quantity +/- , remove, coupons and tips all mutate that store,
+//   so every number on this page recalculates instantly.
+//
+// HOW IT BECOMES FULLY DYNAMIC WITH THE BACKEND (beginner guide):
+//   STEP 1 - LOAD: on mount call fetchCartFn() (GET /cart) from
+//            src/api/api-function/cart.function.ts and hydrate the
+//            store with the server's items (server wins over cache).
+//   STEP 2 - WRITE: every addItem / updateQuantity / removeItem should
+//            ALSO fire its matching API call (POST/PATCH/DELETE /cart)
+//            so the cart survives device switches. Fire-and-forget is
+//            fine; revert the local change if the API errors.
+//   STEP 3 - PLACE ORDER: CartSummaryPanel currently just navigates to
+//            /checkout. Real flow = POST {{base_url}}/customer/bookings
+//            with { customer_address_id } first, clear the store on
+//            success, THEN navigate (see FixNow API docs).
 // ================================================================
 
 import React, { useEffect } from "react";
@@ -20,43 +36,44 @@ import CartSummaryPanel from "@/components/cart/CartSummaryPanel";
 import { useCartStore } from "@/store/useCartStore";
 
 const CartPage = () => {
-  // 1. The cart store uses `skipHydration` — rehydrate it from
-  //    localStorage once on the client so the first render always
-  //    matches the server HTML (no hydration mismatch).
+  // The cart store uses `skipHydration` — rehydrate it from
+  // localStorage once on the client so the first render always
+  // matches the server HTML (no hydration mismatch).
   useEffect(() => {
     useCartStore.persist.rehydrate();
   }, []);
 
-  const { items, getItemCount, _hasHydrated } = useCartStore();
+  const { items, _hasHydrated } = useCartStore();
 
   if (!_hasHydrated) return null;
 
   return (
     <main className="min-h-screen py-8 md:py-10 bg-gradient-to-b from-[#fbfcfe] to-gray-50">
       <div className="max-w-[1350px] mx-auto px-4 sm:px-6">
-        {/* ============ Page Title ============ */}
+        {/* ============ Page Title (back arrow + "Your Cart") ============ */}
         <div className="flex items-center gap-2.5 mb-5">
           <Link
             href="/"
             aria-label="Go back"
-            className="w-[30px] h-[30px] rounded-lg border border-gray-200 bg-white text-gray-600 flex items-center justify-center flex-shrink-0 hover:bg-color-14 hover:border-color4/40 transition-colors"
+            className="w-[30px] h-[30px] rounded-lg border border-gray-200 bg-white text-gray-600 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 hover:border-blue-200 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div className="font-outfit font-bold text-[19px] lg:text-[24px] sm:text-[22px] text-color9">
             Your Cart
-            {items.length > 0 && (
-              <span className="ml-2 text-[13px] text-gray-400 font-albert font-medium">
-                ({getItemCount()} service{getItemCount() > 1 ? "s" : ""})
-              </span>
-            )}
           </div>
         </div>
 
-        {/* ============ Stepper ============ */}
-        <CartStepper activeStep={0} />
+        {/* ============ Stepper (Cart -> Checkout -> Confirm) ============
+            activeStep={0} because we are on the cart page.
+            `highlightNext` reproduces cart.html, which colors the
+            Checkout circle blue as well.
+            On /checkout pass activeStep={1}; on confirm pass 2. */}
+        <CartStepper activeStep={0} highlightNext />
 
-        {/* ============ EMPTY STATE ============ */}
+        {/* ============ EMPTY STATE ============
+            Not in the HTML mockup (it always shows filled carts), but
+            required in a real app when the store has no items yet. */}
         {items.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-10 sm:p-16 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 rounded-full bg-color-14 flex items-center justify-center mb-4">
@@ -77,12 +94,13 @@ const CartPage = () => {
             </Link>
           </div>
         ) : (
-          /* ============ GRID ============ */
+          /* ============ GRID: left items column + right summary column ============ */
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4 items-start">
             {/* ---------- LEFT COLUMN ---------- */}
             <div className="flex flex-col gap-4">
-              {/* Cart Items */}
+              {/* Cart Items table */}
               <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-[18px]">
+                {/* Header row only visible on >= sm screens (like HTML) */}
                 <div className="hidden sm:grid grid-cols-[1fr_auto_auto] gap-3.5 text-[10.5px] uppercase tracking-wide text-gray-500 pb-2 border-b border-gray-200">
                   <span>Service Type</span>
                   <span className="justify-self-center">
@@ -91,6 +109,8 @@ const CartPage = () => {
                   <span className="justify-self-end">Price</span>
                 </div>
 
+                {/* One row per item - rendered from the store.
+                    Dynamic later: also fire PATCH/DELETE calls (STEP 2). */}
                 {items.map((item) => (
                   <CartItemRow key={item.id} item={item} />
                 ))}
@@ -108,13 +128,13 @@ const CartPage = () => {
                 </p>
                 <Link
                   href="#"
-                  className="inline-block mt-1.5 text-color4 font-semibold text-xs hover:underline"
+                  className="inline-block mt-1.5 text-blue-600 font-semibold text-xs hover:underline"
                 >
                   Read Full Policy →
                 </Link>
               </div>
 
-              {/* People Also Prefer */}
+              {/* People Also Prefer (Add buttons feed the same store) */}
               <RelatedServices />
             </div>
 

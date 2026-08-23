@@ -77,6 +77,7 @@ export const fetchRelatedServicesFn = async (): Promise<
 > => {
   // const { data } = await api.get("/services/suggestions");
   // return { success: true, data: data.data };
+  // Mock values mirror the four cards in FIX_Now_HTML/cart.html
   return {
     success: true,
     data: [
@@ -91,26 +92,26 @@ export const fetchRelatedServicesFn = async (): Promise<
       {
         id: "suggested-2",
         name: "Microwave Repair",
-        price: 299,
-        rating: 4.75,
+        price: 1299,
+        rating: 4.5,
         reviewCount: 1299,
         category: "Repairing",
       },
       {
         id: "suggested-3",
-        name: "Fan Installation",
-        price: 199,
-        rating: 4.72,
+        name: "Sofa Deep Cleaning",
+        price: 1199,
+        rating: 4.6,
         reviewCount: 1099,
-        category: "Electrician",
+        category: "Cleaning",
       },
       {
         id: "suggested-4",
-        name: "Furniture Setup",
-        price: 740,
-        rating: 4.71,
+        name: "Geyser Installation",
+        price: 1740,
+        rating: 4.4,
         reviewCount: 869,
-        category: "House Help",
+        category: "Installation",
       },
     ],
   };
