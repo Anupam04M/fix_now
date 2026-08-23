@@ -86,3 +86,9 @@ export const logoutFns = async () => {
     return { success: false };
   }
 };
+export const registerProviderFn = async (payload: FormData) => {
+  // We do NOT use try/catch here so that React Query's `onError` in the hook
+  // can automatically catch the error and display the correct toast message!
+  const { data } = await api.post("/auth/register/provider", payload);
+  return data;
+};

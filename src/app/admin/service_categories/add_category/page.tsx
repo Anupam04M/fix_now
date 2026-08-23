@@ -1,19 +1,83 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, Bell, ChevronDown, Upload, ArrowRight } from "lucide-react";
+import React, { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { Search, Bell, ChevronDown, Upload, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
+
 import avatar from "../../../../assets/images/admin/avatar.jpg";
+import DynamicInput from "@/components/common/DyanmicInput";
+import { categoryInputs } from "@/services/json/category.input";
+import { categorySchema } from "@/services/validation/category.validation";
+import { useCategories } from "@/hooks/useCategoryHooks";
+import { useCategoryWizard } from "@/store/useCategoryWizard";
 
-
-const AddCategory = () => {
+export default function AddCategory() {
   const router = useRouter();
+  const { createCategoryMutation } = useCategories();
 
-  // State for toggles
-  const [showInHome, setShowInHome] = useState(true);
-  const [isActive, setIsActive] = useState(true);
-  const [isFeatured, setIsFeatured] = useState(false);
+  // 3. Use the correct Zustand store name
+  const { categoryBanner, setCategoryBanner, setCreatedCategoryId } =
+    useCategoryWizard();
+
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(categorySchema),
+    defaultValues: { show_in_home: true, is_active: true, is_featured: false },
+  });
+
+  // Watch toggles instead of useState
+  const showInHome = watch("show_in_home");
+  const isActive = watch("is_active");
+  const isFeatured = watch("is_featured");
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 12 * 1024 * 1024)
+        return toast.error("Image must be smaller than 12MB");
+      setCategoryBanner(file, URL.createObjectURL(file));
+    }
+  };
+
+  const onSubmit = async (data: any) => {
+    const formData = new FormData();
+
+    // Append all text/boolean fields to FormData
+    Object.keys(data).forEach((key) => formData.append(key, data[key]));
+
+    // Append the image file if one was selected
+    if (categoryBanner.file) {
+      formData.append("banner", categoryBanner.file);
+    }
+
+    try {
+      const res = await createCategoryMutation.mutateAsync(formData);
+      setCreatedCategoryId(res?.data?.id || res?.id); // Save ID to Zustand for Step 2
+      toast.success("Category Created! Let's add subcategories.");
+      router.push("/admin/service_categories/add_category/add_subcategory");
+    } catch (err) {
+      toast.error("Failed to create category");
+    }
+  };
+
+  // Split inputs to match your UI layout
+  const basicInputs = categoryInputs.filter((inp) =>
+    ["name", "slug", "description"].includes(inp.name),
+  );
+  const seoInputs = categoryInputs.filter((inp) =>
+    ["meta_title", "meta_description"].includes(inp.name),
+  );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-6 lg:p-8 font-sans pb-24">
@@ -42,7 +106,6 @@ const AddCategory = () => {
 
           <div className="flex items-center gap-3 pl-2 md:pl-4 border-l border-gray-200 cursor-pointer">
             <div className="h-12 w-12 overflow-hidden rounded-full bg-gray-200">
-              {/* Replace src with your actual user avatar path */}
               <Image
                 src={avatar}
                 alt="Admin Avatar"
@@ -58,10 +121,13 @@ const AddCategory = () => {
         </div>
       </header>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Category Information */}
-        <div className="lg:col-span-7 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+      {/* Main Form Content */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+      >
+        {/* Left Column: Basic Information */}
+        <div className="lg:col-span-7 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-fit">
           <div className="mb-6">
             <h2 className="text-lg font-bold text-gray-900">
               Category Information
@@ -72,68 +138,73 @@ const AddCategory = () => {
           </div>
 
           <div className="space-y-5">
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Category Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Category Name"
-                className="w-full h-11 rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#1E57A8] transition-colors"
+            {/* Render dynamically without placeholders */}
+            {basicInputs.map((field) => (
+              <DynamicInput
+                key={field.name}
+                name={field.name}
+                label={field.label}
+                type={field.type}
+                register={register}
+                error={
+                  errors[field.name as keyof typeof errors]?.message as string
+                }
               />
-            </div>
+            ))}
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Category Slug (Url)
-              </label>
-              <input
-                type="text"
-                placeholder="Url"
-                className="w-full h-11 rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#1E57A8] transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Category Description
-              </label>
-              <textarea className="w-full h-28 rounded-lg border border-gray-200 p-4 text-sm outline-none focus:border-[#1E57A8] transition-colors resize-none"></textarea>
-            </div>
-
-            {/* Upload Section */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <div className="w-full sm:w-2/3 h-32 rounded-xl bg-gray-100 border border-gray-200 border-dashed flex flex-col items-center justify-center text-gray-500 cursor-pointer hover:bg-gray-50 transition-colors">
-                <Upload size={20} className="mb-2" />
-                <span className="text-sm font-medium">Upload Banner</span>
-                <span className="text-xs text-gray-400 mt-1">
-                  Svg, Png Or Jpg (Max 12 Mb)
-                </span>
-              </div>
-              <div className="w-full sm:w-1/3 flex flex-col items-center justify-center gap-3">
-                <button className="w-full h-10 rounded-full border border-[#1E57A8] text-[#1E57A8] text-sm font-semibold hover:bg-blue-50 transition-colors">
-                  Browse Banner
-                </button>
-                <span className="text-xs text-gray-500 font-medium">
-                  Or Choose From Library
-                </span>
-              </div>
-            </div>
-
-            {/* Preview Section */}
+            {/* Upload Section Managed by Zustand */}
             <div className="pt-2">
-              <label className="block text-sm font-semibold text-gray-900 mb-1">
-                Preview
+              <label className="block text-sm font-semibold text-gray-900 mb-3">
+                Upload Banner
               </label>
-              <p className="text-xs text-gray-500 mb-3">
-                How It Will Appear On Site
-              </p>
-              <div className="w-full h-32 bg-gray-200 rounded-xl"></div>
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <input
+                  type="file"
+                  ref={fileRef}
+                  className="hidden"
+                  onChange={handleImageChange}
+                  accept="image/png, image/jpeg, image/svg+xml"
+                />
+
+                <div
+                  onClick={() => fileRef.current?.click()}
+                  className="w-full sm:w-2/3 h-32 rounded-xl bg-gray-100 border border-gray-200 border-dashed flex flex-col items-center justify-center text-gray-500 cursor-pointer hover:bg-gray-50 overflow-hidden transition-colors"
+                >
+                  {categoryBanner.preview ? (
+                    <img
+                      src={categoryBanner.preview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      <Upload size={20} className="mb-2" />
+                      <span className="text-sm font-medium">Upload Banner</span>
+                      <span className="text-xs text-gray-400 mt-1">
+                        Svg, Png Or Jpg (Max 12 Mb)
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                <div className="w-full sm:w-1/3 flex flex-col items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="w-full h-10 rounded-full border border-[#1E57A8] text-[#1E57A8] text-sm font-semibold hover:bg-blue-50 transition-colors"
+                  >
+                    Browse Banner
+                  </button>
+                  <span className="text-xs text-gray-500 font-medium">
+                    Or Choose From Library
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Category Settings */}
+        {/* Right Column: Category Settings & SEO */}
         <div className="lg:col-span-5 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-fit">
           <div className="mb-6">
             <h2 className="text-lg font-bold text-gray-900">
@@ -157,7 +228,8 @@ const AddCategory = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setShowInHome(!showInHome)}
+                  type="button"
+                  onClick={() => setValue("show_in_home", !showInHome)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showInHome ? "bg-green-500" : "bg-gray-200"}`}
                 >
                   <span
@@ -180,7 +252,8 @@ const AddCategory = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setIsActive(!isActive)}
+                  type="button"
+                  onClick={() => setValue("is_active", !isActive)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isActive ? "bg-green-500" : "bg-gray-200"}`}
                 >
                   <span
@@ -205,7 +278,8 @@ const AddCategory = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setIsFeatured(!isFeatured)}
+                  type="button"
+                  onClick={() => setValue("is_featured", !isFeatured)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isFeatured ? "bg-green-500" : "bg-gray-200"}`}
                 >
                   <span
@@ -220,57 +294,49 @@ const AddCategory = () => {
 
             <hr className="border-gray-100" />
 
-            {/* SEO Inputs */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1">
-                Meta Title (Seo)
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Enter The Meta Title For This Category
-              </p>
-              <input
-                type="text"
-                className="w-full h-11 rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#1E57A8] transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1">
-                Meta Description (Seo)
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Enter Meta Description For This Category
-              </p>
-              <textarea className="w-full h-24 rounded-lg border border-gray-200 p-4 text-sm outline-none focus:border-[#1E57A8] transition-colors resize-none"></textarea>
+            {/* SEO Inputs Rendered Dynamically */}
+            <div className="space-y-5 pt-2">
+              <h3 className="text-sm font-bold text-gray-900">
+                SEO Configuration
+              </h3>
+              {seoInputs.map((field) => (
+                <DynamicInput
+                  key={field.name}
+                  name={field.name}
+                  label={field.label}
+                  type={field.type}
+                  register={register}
+                  error={
+                    errors[field.name as keyof typeof errors]?.message as string
+                  }
+                />
+              ))}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Action Footer */}
-      <div className="fixed bottom-0 left-0 right-0 lg:left-[295px] bg-white border-t border-gray-200 p-4 px-6 flex items-center justify-between z-40 rounded-t-2xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button
-          onClick={() => router.push("/admin/service_categories")}
-          className="text-sm font-semibold text-[#1E57A8] hover:underline"
-        >
-          Back
-        </button>
-        <div className="flex items-center gap-4">
+        {/* Bottom Action Footer */}
+        <div className="fixed bottom-0 left-0 right-0 lg:left-[295px] bg-white border-t border-gray-200 p-4 px-6 flex items-center justify-between z-40 rounded-t-2xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
           <button
+            type="button"
             onClick={() => router.push("/admin/service_categories")}
-            className="h-10 px-6 rounded-full border border-[#1E57A8] text-[#1E57A8] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="text-sm font-semibold text-[#1E57A8] hover:underline"
           >
             Cancel
           </button>
-          <button onClick={() => router.push("/admin/service_categories/add_category/add_subcategory")}
-          className="h-10 px-6 rounded-full bg-[#1E57A8] text-white text-sm font-semibold hover:bg-[#154385] transition-colors flex items-center gap-2">
-            Next
-            <ArrowRight size={16} />
-          </button>
+
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={createCategoryMutation.isPending}
+              className="h-10 px-6 rounded-full bg-[#1E57A8] text-white text-sm font-semibold hover:bg-[#154385] transition-colors flex items-center gap-2 disabled:opacity-70"
+            >
+              {createCategoryMutation.isPending ? "Saving..." : "Next"}
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
-};
-
-export default AddCategory;
+}

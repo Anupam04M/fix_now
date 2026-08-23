@@ -23,15 +23,7 @@ const navItems: NavItem[] = [
   {
     name: "Services",
     path: "/service",
-    dropdown: [
-      { name: "Electrician", path: "/service/electrician" },
-      { name: "Plumber", path: "/service/plumber" },
-      { name: "Personal Grooming", path: "/service/personalgrooming" },
-      { name: "House Help", path: "/service/househelp" },
-      { name: "Repairing", path: "/service/repairing" },
-      { name: "Carpenter", path: "/service/carpenter" },
-      { name: "Delivery Assistance", path: "/service/deliveryassistance" },
-    ],
+   
   },
   { name: "About", path: "/about" },
   { name: "Contact Us", path: "/contact" },
