@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/admin/bookings/{{booking_id}}/assign"
+method: POST
+headers:
+  Authorization: Bearer {{admin_token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "notes": "Operational assignment"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json?.data?.assignment?.id) pm.collectionVariables.set('assignment_id', json.data.assignment.id);
+    language: text/javascript
+order: 1000

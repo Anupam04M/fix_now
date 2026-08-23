@@ -6,7 +6,7 @@ workspace:
 
 cloudResources:
   collections:
-    ../postman/collections/FixNow API: 233b2fa8-d576-4478-b913-66561c304f32
+    ../postman/collections/FixNow API: 0285a911-1f98-4c04-84a2-e260f05698f7
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:
