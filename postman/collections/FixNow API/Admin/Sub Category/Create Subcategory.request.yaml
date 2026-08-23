@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{base_url}}/admin/subcategories"
+method: POST
+headers:
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+body:
+  type: formdata
+  content:
+    - type: text
+      key: category_id
+      value: "1"
+    - type: text
+      key: name
+      value: AC & Cooling
+    - type: file
+      key: icon
+      src:
+        - /C:/Users/visha/Downloads/Ac and cooling subacategory.jpg
+    - type: text
+      key: description
+      value: Professional air conditioning installation, repair, and maintenance services.
+order: 2000

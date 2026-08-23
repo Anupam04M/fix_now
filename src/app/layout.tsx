@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit, Albert_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Providers from "./providers";
+
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -26,12 +28,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("scroll-smooth", outfit.variable, albertSans.variable, "font-sans", geist.variable)}>
+    <html lang="en" className={cn("scroll-smooth", outfit.variable, albertSans.variable, "font-sans", geist.variable)}
+    suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
       </head>
       <body className="font-[family-name:var(--albert-sans-r)] min-h-screen flex flex-col w-full antialiased">
-        {children}
+        <Providers> {children}</Providers>
       </body>
     </html>
   );

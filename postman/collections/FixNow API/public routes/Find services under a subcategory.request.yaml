@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/categories/{{category_id}}/services?subcategory_id=1"
+method: GET
+queryParams:
+  subcategory_id: "1"
+order: 4000
